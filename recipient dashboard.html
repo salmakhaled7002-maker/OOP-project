@@ -16,50 +16,41 @@
             </div>
             <nav>
                 <a href="#" class="active"><i class="fa-solid fa-house"></i> Overview</a>
-                <a href="#" onclick="toggleModal('caseModal')"><i class="fa-solid fa-file-medical"></i> Submit New Case</a>
-                
+                <a href="#" onclick="toggleModal('caseModal')"><i class="fa-solid fa-plus-circle"></i> New Case</a>
                 <a href="login.html" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
             </nav>
         </aside>
 
         <main class="main-content">
             <header>
-                <h1>Welcome, Recipient</h1>
-                <p>Track your aid requests and manage your cases.</p>
+                <h1>Welcome, <span id="displayUserName">Recipient</span></h1>
+                <p>Manage your aid requests and track status.</p>
             </header>
 
             <div class="status-grid">
                 <div class="card">
-                    <h3>Case Status</h3>
-                    <div class="status-badge pending" id="currentStatus">Pending Review</div>
-                    <p class="small-text">Last updated: Oct 25, 2019</p>
+                    <h3>Active Cases</h3>
+                    <div class="amount" id="caseCount">0</div>
                 </div>
                 <div class="card">
-                    <h3>Funds Received</h3>
+                    <h3>Aid Received</h3>
                     <div class="amount">0.00 EGP</div>
-                    <p class="small-text">Total aid disbursed</p>
                 </div>
             </div>
 
             <section class="table-section">
-                <h2>Your Submitted Cases</h2>
+                <h2>Your Case History</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Case ID</th>
-                            <th>Description</th>
+                            <th>ID</th>
+                            <th>Title</th>
                             <th>Date</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="caseTableBody">
-                        <tr>
-                            <td>#CASE-101</td>
-                            <td>Medical Surgery Support</td>
-                            <td>2019-10-24</td>
-                            <td><span class="tag pending">Pending</span></td>
-                        </tr>
-                    </tbody>
+                        </tbody>
                 </table>
             </section>
         </main>
@@ -68,24 +59,15 @@
     <div id="caseModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="toggleModal('caseModal')">&times;</span>
-            <h2>Submit Beneficiary Case</h2>
+            <h2>Submit New Case</h2>
             <form id="beneficiaryForm">
                 <label>Case Title</label>
-                <input type="text" placeholder="e.g., Education Fees Support" required>
-                
-                <label>Financial Need Description</label>
-                <textarea rows="4" placeholder="Explain your situation..." required></textarea>
-                
-                <label>Requested Amount (EGP)</label>
-                <input type="number" placeholder="5000" required>
-
-                <label>Supporting Documents</label>
-                <input type="file" class="file-input" multiple>
-                <p class="file-hint">Upload IDs, medical reports, or utility bills.</p>
-
-                <button type="button" class="btn-submit" onclick="submitNewCase()">
-                    <i class="fa-solid fa-paper-plane"></i> Submit Application
-                </button>
+                <input type="text" id="caseTitle" placeholder="e.g. Medical Surgery" required>
+                <label>Amount Needed (EGP)</label>
+                <input type="number" id="caseAmount" placeholder="5000" required>
+                <label>Details</label>
+                <textarea id="caseDetails" rows="4" placeholder="Describe your situation..." required></textarea>
+                <button type="button" class="btn-submit" onclick="submitNewCase()">Submit Case</button>
             </form>
         </div>
     </div>

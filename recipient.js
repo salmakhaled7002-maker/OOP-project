@@ -1,5 +1,7 @@
-
 document.addEventListener('DOMContentLoaded', () => {
+    
+    const name = localStorage.getItem("userName") || "Recipient";
+    document.getElementById("displayUserName").innerText = name;
     loadSavedCases();
 });
 
@@ -14,77 +16,57 @@ function toggleModal(id) {
 }
 
 function submitNewCase() {
-    const form = document.getElementById('beneficiaryForm');
-    const title = form.querySelector('input[type="text"]').value.trim();
-    const description = form.querySelector('textarea').value.trim();
-    const amount = form.querySelector('input[type="number"]').value.trim();
+    const title = document.getElementById('caseTitle').value.trim();
+    const amount = document.getElementById('caseAmount').value.trim();
+    const details = document.getElementById('caseDetails').value.trim();
 
-    if (title === "" || description === "" || amount === "") {
-        alert("Please fill in all required fields.");
+    if (!title || !amount || !details) {
+        alert("Please fill all fields");
         return;
     }
 
-    
     const newCase = {
-        id: "CASE-" + (Math.floor(Math.random() * 9000) + 1000),
+        id: "CASE-" + Math.floor(Math.random() * 9000 + 1000),
         title: title,
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toLocaleDateString(),
         status: "Pending"
     };
 
     
-    saveCaseToLocal(newCase);
+    let cases = JSON.parse(localStorage.getItem('myCases')) || [];
+    cases.push(newCase);
+    localStorage.setItem('myCases', JSON.stringify(cases));
 
-    
     addCaseToTable(newCase);
-
-    alert("Success! Your case has been saved.");
-    form.reset();
+    updateCount();
+    
+    alert("Case Submitted Successfully!");
     toggleModal('caseModal');
 }
 
-
-function saveCaseToLocal(caseObj) {
-    let cases;
-    if (localStorage.getItem('myCases') === null) {
-        cases = [];
-    } else {
-        cases = JSON.parse(localStorage.getItem('myCases'));
-    }
-    cases.push(caseObj);
-    localStorage.setItem('myCases', JSON.stringify(cases));
-}
-
-
 function loadSavedCases() {
-    let cases;
-    if (localStorage.getItem('myCases') === null) {
-        cases = [];
-    } else {
-        cases = JSON.parse(localStorage.getItem('myCases'));
-    }
-
-    cases.reverse().forEach(caseObj => {
-        addCaseToTable(caseObj);
-    });
+    let cases = JSON.parse(localStorage.getItem('myCases')) || [];
+    document.getElementById('caseTableBody').innerHTML = ""; 
+    cases.reverse().forEach(c => addCaseToTable(c));
+    updateCount();
 }
 
-function addCaseToTable(caseObj) {
+function addCaseToTable(c) {
     const tableBody = document.getElementById('caseTableBody');
-    const newRow = `
-        <tr>
-            <td>#${caseObj.id}</td>
-            <td>${caseObj.title}</td>
-            <td>${caseObj.date}</td>
-            <td><span class="tag pending">${caseObj.status}</span></td>
-        </tr>
-    `;
-    tableBody.insertAdjacentHTML('afterbegin', newRow);
+    const row = `<tr>
+        <td>#${c.id}</td>
+        <td>${c.title}</td>
+        <td>${c.date}</td>
+        <td><span class="tag pending">${c.status}</span></td>
+    </tr>`;
+    tableBody.insertAdjacentHTML('afterbegin', row);
 }
 
-window.onclick = function(event) {
-    const modal = document.getElementById('caseModal');
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
+function updateCount() {
+    let cases = JSON.parse(localStorage.getItem('myCases')) || [];
+    document.getElementById('caseCount').innerText = cases.length;
+}
+
+window.onclick = (event) => {
+    if (event.target.className === 'modal') toggleModal('caseModal');
 }
