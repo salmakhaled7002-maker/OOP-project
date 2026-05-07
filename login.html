@@ -1,147 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Jasr Al-Khayr - Login</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f4f7f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #ffffff;
-            width: 380px;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border: 1px solid #e1e8ed;
-            text-align: center;
-        }
-        .logo-box {
-            width: 80px;
-            height: 80px;
-            background-color: #eef5ff;
-            border: 2px solid #1a73e8;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: #1a73e8;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        h2 {
-            margin: 0;
-            color: #202124;
-            font-size: 24px;
-        }
-        .subtitle {
-            color: #5f6368;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-        .input-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-size: 13px;
-            color: #3c4043;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 15px;
-            transition: border 0.2s;
-        }
-        input:focus {
-            outline: none;
-            border-color: #1a73e8;
-        }
-        .btn-signin {
-            width: 100%;
-            padding: 14px;
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .btn-signin:hover {
-            background-color: #1557b0;
-        }
-        .footer-links {
-            margin-top: 25px;
-            font-size: 14px;
-        }
-        .footer-links a {
-            color: #1a73e8;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        .role-box {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            border: 1px solid #f1f3f4;
-            font-size: 13px;
-            color: #70757a;
-        }
-        .role-list {
-            color: #3c4043;
-            font-weight: 600;
-            margin-top: 5px;
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+
+  <link rel="stylesheet" href="login.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
+
 <body>
 
-<div class="container">
-    <div class="logo-box">JK</div>
-    <h2>Jasr Al-Khayr</h2>
-    <div class="subtitle">Charity Management System</div>
+  <div class="container">
 
-    <form>
-        <div class="input-group">
-            <label>Email address</label>
-            <input type="email" placeholder="donor@example.com" required>
-        </div>
-
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" placeholder="••••••••••••" required>
-        </div>
-
-        <button type="submit" class="btn-signin">Sign In</button>
-    </form>
-
-    <div class="footer-links">
-        <a href="#">Forgot password?</a>
-        <a href="#">Register</a>
+    <div class="logo-box">
+        <div class="logo">🌉</div>
     </div>
 
-    <div class="role-box">
-        Role detected after login:
-        <span class="role-list">Donor | Admin | Recipient</span>
-    </div>
-</div>
+    <h1>Jasr El Kheir</h1>
 
+    <div class="login-card">
+
+      <h2>Login</h2>
+
+      <p class="subtitle">
+        Enter your credentials to access your account
+      </p>
+
+      <form>
+
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com">
+
+        <label>Password</label>
+        <input type="password" placeholder="••••••••">
+
+        <button type="button" onclick="login()">
+          <i class="fa-solid fa-shield"></i>
+          Login
+        </button>
+
+      </form>
+
+      <p class="signup">
+        Don't have an account?
+        <a href="#">Sign up</a>
+      </p>
+
+    </div>
+
+    <p class="footer">
+      "Transparency builds trust"
+    </p>
+
+  </div>
+
+  <script src="login.js"></script>
 </body>
 </html>
