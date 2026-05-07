@@ -1,0 +1,58 @@
+let role1 = document.getElementById("role1");
+let role2 = document.getElementById("role2");
+let role3 = document.getElementById("role3");
+
+role1.onclick = function () {
+
+    role1.classList.add("active");
+    role2.classList.remove("active");
+    role3.classList.remove("active");
+
+    role1.querySelector("input").checked = true;
+
+}
+
+role2.onclick = function () {
+
+    role2.classList.add("active");
+    role1.classList.remove("active");
+    role3.classList.remove("active");
+
+    role2.querySelector("input").checked = true;
+
+}
+
+role3.onclick = function () {
+
+    role3.classList.add("active");
+    role1.classList.remove("active");
+    role2.classList.remove("active");
+
+    role3.querySelector("input").checked = true;
+
+}
+
+function signup(){
+
+    let name =
+    document.querySelector('input[type="text"]').value;
+
+    let email =
+    document.querySelector('input[type="email"]').value;
+
+    let password =
+    document.querySelector('input[type="password"]').value;
+
+    if(name === "" || email === "" || password === ""){
+
+        alert("Please fill all fields");
+
+    }
+
+    else{
+
+        alert("Account Created Successfully");
+
+    }
+
+}
