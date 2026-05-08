@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jasr Al-Khayr — Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin-dashboard.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="var(--gold)" stroke-width="2"/>
+          <path d="M20 8 C14 8 10 13 10 18 C10 26 20 32 20 32 C20 32 30 26 30 18 C30 13 26 8 20 8Z" fill="var(--gold)" opacity="0.85"/>
+          <circle cx="20" cy="18" r="4" fill="var(--bg-sidebar)"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-ar">جسر الخير</span>
+        <span class="brand-en">Jasr Al-Khayr</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-label">Main</span>
+      <a href="#" class="nav-item active" data-section="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </a>
+      <a href="#" class="nav-item" data-section="projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Charity Projects
+        <span class="nav-badge">5</span>
+      </a>
+      <a href="#" class="nav-item" data-section="cases">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Beneficiary Cases
+        <span class="nav-badge alert">3</span>
+      </a>
+      <a href="#" class="nav-item" data-section="donors">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        Donors
+      </a>
+      <span class="nav-label">Finance</span>
+      <a href="#" class="nav-item" data-section="disbursements">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Fund Disbursement
+      </a>
+      <a href="#" class="nav-item" data-section="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Financial Reports
+      </a>
+      <span class="nav-label">System</span>
+      <a href="#" class="nav-item" data-section="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 4.93 19.07M4.93 4.93A10 10 0 0 1 19.07 19.07"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="admin-avatar">A</div>
+      <div class="admin-info">
+        <span class="admin-name">Admin User</span>
+        <span class="admin-role">System Administrator</span>
+      </div>
+      <button class="logout-btn" title="Logout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+  <main class="main-content">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="page-title" id="pageTitle">Overview</div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search projects, cases…" />
+        </div>
+        <div class="notif-bell" id="notifBell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+          <!-- Notification Dropdown -->
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">Notifications</div>
+            <div class="notif-item unread">
+              <div class="notif-icon gold">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+              </div>
+              <div class="notif-text">
+                <strong>Mosque Project</strong> reached its funding target of EGP 50,000!
+                <span class="notif-time">2 mins ago</span>
+              </div>
+            </div>
+            <div class="notif-item unread">
+              <div class="notif-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/></svg>
+              </div>
+              <div class="notif-text">
+                <strong>New case submitted</strong> by Ahmed Hassan — pending review.
+                <span class="notif-time">15 mins ago</span>
+              </div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5"/></svg>
+              </div>
+              <div class="notif-text">
+                Fund disbursement of EGP 1,200 completed for case #C-0045.
+                <span class="notif-time">1 hour ago</span>
+              </div>
+            </div>
+            <div class="notif-footer">View all notifications</div>
+          </div>
+        </div>
+        <div class="date-display" id="currentDate"></div>
+      </div>
+    </header>
+
+    <!-- ═══ SECTION: OVERVIEW ═══ -->
+    <section class="section active" id="section-overview">
+
+      <!-- ALERT BANNER -->
+      <div class="alert-banner" id="alertBanner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span><strong>Alert:</strong> "Mosque Construction" project has reached its target of EGP 50,000. Please review and close the project.</span>
+        <button onclick="document.getElementById('alertBanner').style.display='none'">✕</button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card" data-animate>
+          <div class="stat-icon teal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="stat-body">
+            <span class="stat-label">Total Donations</span>
+            <span class="stat-value" data-target="284500">0</span>
+            <span class="stat-currency">EGP</span>
+            <span class="stat-delta up">↑ 14% this month</span>
+          </div>
+        </div>
+        <div class="stat-card" data-animate>
+          <div class="stat-icon gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="stat-body">
+            <span class="stat-label">Active Projects</span>
+            <span class="stat-value" data-target="5">0</span>
+            <span class="stat-currency">projects</span>
+            <span class="stat-delta up">↑ 2 new</span>
+          </div>
+        </div>
+        <div class="stat-card" data-animate>
+          <div class="stat-icon rose">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="stat-body">
+            <span class="stat-label">Pending Cases</span>
+            <span class="stat-value" data-target="3">0</span>
+            <span class="stat-currency">cases</span>
+            <span class="stat-delta down">↓ needs review</span>
+          </div>
+        </div>
+        <div class="stat-card" data-animate>
+          <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <div class="stat-body">
+            <span class="stat-label">Total Donors</span>
+            <span class="stat-value" data-target="312">0</span>
+            <span class="stat-currency">donors</span>
+            <span class="stat-delta up">↑ 27 this week</span>
+          </div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header">
+            <h3>Project Funding Status</h3>
+            <button class="btn-sm" data-section-link="projects">Manage Projects</button>
+          </div>
+          <div class="project-list" id="projectList">
+       
+          </div>
+        </div>
+
+  
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Beneficiary Cases</h3>
+            <button class="btn-sm" data-section-link="cases">View All</button>
+          </div>
+          <div class="case-list" id="caseListOverview">
+         
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="card mt">
+        <div class="card-header">
+          <h3>Recent Transactions</h3>
+          <button class="btn-sm" data-section-link="reports">Full Report</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="transactionTable">
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Donor</th>
+                <th>Project</th>
+                <th>Type</th>
+                <th>Amount (EGP)</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transactionBody">
+          
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+
+    <section class="section" id="section-projects">
+      <div class="section-header">
+        <h2>Charity Projects</h2>
+        <button class="btn-primary" id="openCreateProject">+ Create New Project</button>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid">
+       
+      </div>
+    </section>
+
+
+    <section class="section" id="section-cases">
+      <div class="section-header">
+        <h2>Beneficiary Cases</h2>
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="Pending">Pending</button>
+          <button class="filter-btn" data-filter="Approved">Approved</button>
+          <button class="filter-btn" data-filter="Rejected">Rejected</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Recipient Name</th>
+                <th>Case Description</th>
+                <th>Submitted</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="casesBody">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  
+    <section class="section" id="section-donors">
+      <div class="section-header">
+        <h2>Donor Management</h2>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Donor ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Wallet Balance (EGP)</th>
+                <th>Total Donated (EGP)</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody id="donorsBody">
+           
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="section-disbursements">
+      <div class="section-header">
+        <h2>Fund Disbursement</h2>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><h3>Disburse Funds</h3></div>
+          <form class="disburse-form" id="disburseForm">
+            <label>Select Approved Case</label>
+            <select id="disbCase">
+              <option value="">-- Select Case --</option>
+            </select>
+            <label>Select Project</label>
+            <select id="disbProject">
+              <option value="">-- Select Project --</option>
+            </select>
+            <label>Disbursement Amount (EGP)</label>
+            <input type="number" id="disbAmount" placeholder="Enter amount…" min="1" />
+            <div class="available-funds" id="availFunds">Available project funds: —</div>
+            <button type="submit" class="btn-primary full-width">Disburse Funds</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Disbursement History</h3></div>
+         
+          </div>
+        </div>
+      </div>
+    </section>
+
+   
+    <section class="section" id="section-reports">
+      <div class="section-header">
+        <h2>Financial Reports</h2>
+      </div>
+
+     
+      <div class="card">
+        <div class="card-header">
+          <h3>Donations per Project</h3>
+          <select id="reportPeriod">
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <div class="chart-container">
+          <canvas id="donationsChart"></canvas>
+        </div>
+      </div>
+
+      <div class="two-col mt">
+        <div class="card">
+          <div class="card-header"><h3>Summary Statistics</h3></div>
+          <div class="summary-stats" id="summaryStats">
+        
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Export Report</h3>
+          </div>
+          <div class="export-area">
+            <p>Generate and download a complete financial report for the selected period.</p>
+            <button class="btn-primary" id="exportBtn">Download PDF Report</button>
+            <div class="export-success" id="exportSuccess" style="display:none">
+              ✓ Report generated successfully!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="section-settings">
+      <div class="section-header"><h2>System Settings</h2></div>
+      <div class="card settings-card">
+        <h3>Admin Account</h3>
+        <div class="settings-row">
+          <label>Full Name</label>
+          <input type="text" value="Admin User" />
+        </div>
+        <div class="settings-row">
+          <label>Email</label>
+          <input type="email" value="admin@jasralkhayr.org" />
+        </div>
+        <div class="settings-row">
+          <label>Password</label>
+          <input type="password" value="••••••••" />
+        </div>
+        <button class="btn-primary">Save Changes</button>
+      </div>
+      <div class="card settings-card mt">
+        <h3>Notifications</h3>
+        <div class="toggle-row">
+          <span>Alert when project reaches funding target</span>
+          <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Notify on new beneficiary case submission</span>
+          <label class="toggle-switch"><input type="checkbox" checked /><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Daily financial summary email</span>
+          <label class="toggle-switch"><input type="checkbox" /><span class="slider"></span></label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  
+  <div class="modal-overlay" id="createProjectModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Create New Charity Project</h3>
+        <button class="modal-close" id="closeCreateProject">✕</button>
+      </div>
+      <form class="modal-form" id="createProjectForm">
+        <label>Project Name</label>
+        <input type="text" id="newProjectName" placeholder="e.g. Orphan Sponsorship Program" required />
+        <label>Project Category</label>
+        <select id="newProjectCategory">
+          <option>Orphan Sponsorship</option>
+          <option>Mosque Construction</option>
+          <option>Ramadan Feeding Program</option>
+          <option>Medical Aid</option>
+          <option>Education Support</option>
+        </select>
+        <label>Funding Target (EGP)</label>
+        <input type="number" id="newProjectTarget" placeholder="Enter target amount…" min="100" required />
+        <label>Description</label>
+        <textarea id="newProjectDesc" placeholder="Describe the project…" rows="3"></textarea>
+        <button type="submit" class="btn-primary full-width">Create Project</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="caseReviewModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Review Beneficiary Case</h3>
+        <button class="modal-close" id="closeCaseReview">✕</button>
+      </div>
+      <div class="modal-body" id="caseReviewBody">
+       
+      </div>
+      <div class="modal-actions">
+        <button class="btn-success" id="approveCase">✓ Approve Case</button>
+        <button class="btn-danger" id="rejectCase">✕ Reject Case</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin-dashboard.js"></script>
+  <link rel="stylesheet"href="css">
+</body>
+</html>
