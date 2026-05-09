@@ -29,6 +29,8 @@ body {
     background: var(--white);
     border-right: 2px solid var(--border);
     padding: 30px 20px;
+
+    
 }
 
 .logo-section {
