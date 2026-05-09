@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+  <title>Donor Dashboard</title>
+
+  <link rel="stylesheet" href="donor dashboard.css">
+
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+  <div class="sidebar">
+
+    <div>
+
+      <h2>🌉 Jasr El Kheir</h2>
+
+      <ul>
+
+        <li onclick="showDashboard()">
+
+          <i class="fa-solid fa-house"></i>
+
+          Dashboard
+
+        </li>
+
+        <li onclick="showDonations()">
+
+          <i class="fa-solid fa-hand-holding-heart"></i>
+
+          Donations
+
+        </li>
+
+        <li onclick="showProfile()">
+
+          <i class="fa-solid fa-user"></i>
+
+          Profile
+
+        </li>
+
+        <li onclick="showSettings()">
+
+          <i class="fa-solid fa-gear"></i>
+
+          Settings
+
+        </li>
+
+      </ul>
+
+    </div>
+
+    <button class="logout-btn"
+    onclick="logout()">
+
+      <i class="fa-solid fa-right-from-bracket"></i>
+
+      Logout
+
+    </button>
+
+  </div>
+
+  <div class="main-content">
+
+    <div id="content"></div>
+
+  </div>
+
+  <script src="donor dashboard.js"></script>
+
+</body>
+</html>
