@@ -11,3 +11,4 @@ function goSignup(){
   "signup.html";
 
 }
+
