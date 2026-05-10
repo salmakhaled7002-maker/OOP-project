@@ -33,6 +33,7 @@ body{
   justify-content:flex-start;
 }
 
+
 .logo-section{
   text-align:center;
   margin-bottom:25px;
@@ -70,19 +71,22 @@ nav a i{
   font-size:18px;
 }
 
-nav a.active,
+nav a.active{
+ color:white;
+}
 nav a:hover{
   background:white;
-  color:var(--primary);
+  color:#0b8f5a;
 }
 
 nav a.logout{
   margin-top:40px;
-  color:white;
+   color:#006b4f;
+  background:white;
 }
 
 nav a.logout:hover{
-  background:white;
+ background:white;
   color:#d9534f;
 }
 

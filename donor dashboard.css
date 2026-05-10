@@ -55,6 +55,10 @@ body{
   cursor:pointer;
   font-size:16px;
 }
+.logout-btn:hover{
+ background:white;
+  color:#d9534f;
+}
 
 .main-content{
   flex:1;
