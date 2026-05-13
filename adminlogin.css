@@ -1,4 +1,5 @@
 /* Jasr El Kheir - Admin Login (Light & Professional Style) */
+
 * {
   margin: 0;
   padding: 0;
@@ -11,12 +12,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f8faf9; /* خلفية فاتحة جداً مريحة */
+  background-color: #f8faf9;
   position: relative;
   overflow-x: hidden;
 }
 
-/* خلفية الرسومات الخفيفة (Bridge Pattern) */
 body::before {
   content: "";
   position: absolute;
@@ -37,7 +37,7 @@ body::before {
   align-items: center;
 }
 
-/* BRAND SECTION (Outside the box) */
+/* BRAND */
 .brand {
   text-align: center;
   margin-bottom: 25px;
@@ -57,7 +57,6 @@ body::before {
   position: relative;
 }
 
-/* كلمة Admin صغيرة تحت اللوجو */
 .logo-box::after {
   content: "ADMIN";
   position: absolute;
@@ -83,7 +82,7 @@ body::before {
   letter-spacing: 1px;
 }
 
-/* THE WHITE CARD BOX (Starts after Brand) */
+/* CARD */
 .login-card {
   background: white;
   width: 100%;
@@ -106,10 +105,13 @@ body::before {
   text-align: center;
 }
 
-/* FORM ELEMENTS */
-form { text-align: left; }
+form {
+  text-align: left;
+}
 
-.input-group { margin-bottom: 20px; }
+.input-group {
+  margin-bottom: 20px;
+}
 
 label {
   display: block;
@@ -125,14 +127,16 @@ label {
   align-items: center;
 }
 
+/* FIXED ERROR HERE */
 .input-wrapper svg:not(.password-toggle) {
   position: absolute;
   left: 15px;
   width: 18px;
   height: 18px;
-  color: #7ba45e; /* الأيقونات بنفس لون البراند */
+  color: #7ba45e;
 }
 
+/* INPUT */
 input {
   width: 100%;
   padding: 14px 15px 14px 45px;
@@ -158,7 +162,7 @@ input:focus {
   color: #bbb;
 }
 
-/* LOGIN BUTTON (Friendly Green) */
+/* BUTTON */
 .login-btn {
   width: 100%;
   padding: 16px;
@@ -194,9 +198,12 @@ input:focus {
   gap: 10px;
   font-size: 13px;
 }
-.error-message.show { display: flex; }
 
-/* BOTTOM LINKS */
+.error-message.show {
+  display: flex;
+}
+
+/* OPTIONS */
 .options-row {
   display: flex;
   justify-content: space-between;

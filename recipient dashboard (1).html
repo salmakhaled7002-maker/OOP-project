@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Recipient Dashboard</title>
+
+<link rel="stylesheet" href="recipient.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo-area">
+            <div class="logo">🌉</div>
+            <h2>Jasr El Kheir</h2>
+        </div>
+
+        <nav>
+            <a href="#" class="active">
+                <i class="fa-solid fa-house"></i>
+                Overview
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-plus-circle"></i>
+                Submit Case
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main-content">
+
+        <header>
+            <h1>Welcome, <span>Amina</span></h1>
+            <p>Track your aid requests and manage cases.</p>
+        </header>
+
+        <div class="stats">
+
+            <div class="stat-box">
+                <h3>Active Cases</h3>
+                <div class="number">2</div>
+            </div>
+
+            <div class="stat-box">
+                <h3>Total Aid</h3>
+                <div class="number">2150 EGP</div>
+            </div>
+
+        </div>
+
+        <div class="table-card">
+
+            <h2>Your Submitted Cases</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Case ID</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>#C-101</td>
+                        <td>Medical Support</td>
+                        <td>2025-04-01</td>
+                        <td class="approved">Approved</td>
+                    </tr>
+
+                    <tr>
+                        <td>#C-102</td>
+                        <td>Winter Clothes</td>
+                        <td>2025-04-10</td>
+                        <td class="pending">Pending</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
