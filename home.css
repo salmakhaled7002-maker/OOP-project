@@ -6,7 +6,7 @@
 }
 
 body{
-  background:#f5f7f8;
+  background:#ecf3ef;
   overflow-x:hidden;
 }
 
@@ -15,7 +15,7 @@ nav{
   margin:auto;
   margin-top:20px;
   padding:18px 30px;
-  background:white;
+  background:#216146;
   border-radius:20px;
   display:flex;
   justify-content:center;
@@ -24,7 +24,7 @@ nav{
 }
 
 nav h2{
-  color:#1b4332;
+  color:white;
   font-size:28px;
 }
 

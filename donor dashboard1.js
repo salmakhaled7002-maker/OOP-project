@@ -517,7 +517,7 @@ function saveSettings(){
 function logout(){
 
   window.location.href =
-  "home.html";
+  "login.html";
 
 }
 
