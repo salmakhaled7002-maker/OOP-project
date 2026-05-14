@@ -8,6 +8,9 @@ class AboutContactPage {
         this.signupButton =
             document.getElementById("signupBtn");
 
+        this.homeButton =
+            document.getElementById("homeBtn");
+
         this.initialize();
     }
 
@@ -27,6 +30,11 @@ class AboutContactPage {
             "click",
             () => this.goSignup()
         );
+
+        this.homeButton.addEventListener(
+            "click",
+            () => this.goHome()
+        );
     }
 
     goLogin() {
@@ -39,6 +47,12 @@ class AboutContactPage {
 
         window.location.href =
             "signup.html";
+    }
+
+    goHome() {
+
+        window.location.href =
+            "home.html";
     }
 }
 

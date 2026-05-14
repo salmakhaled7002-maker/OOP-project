@@ -17,21 +17,23 @@
 
 body{
 
-    min-height:100vh;
-
+    min-height:75vh;
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     padding:20px;
 
-    background:linear-gradient(
-    to bottom,
-    #eef7f3 30%,
-    #f7f5f0 70%
-    );
+    background: linear-gradient(
+        rgba(255,255,255,0.10),
+        rgba(255,255,255,0.10)
+        
+    ),
+    url("images/login&signup.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .container{
