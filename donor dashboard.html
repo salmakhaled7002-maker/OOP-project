@@ -1,351 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Donor Dashboard — Jasr El Kheir</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8">
 
-<link rel="stylesheet" href="donor dashboard.css">
+  <meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+  <title>Donor Dashboard</title>
+
+  <link rel="stylesheet" href="donor dashboard.css">
+
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
+
 <body>
 
-<aside class="sidebar">
-  <div>
-    <div class="sidebar-brand">
-      <div class="brand-icon-wrap">🌉</div>
-      <div class="brand-texts">
-        <span class="name-ar">جسر الخير</span>
-        <span class="name-en">Jasr El Kheir</span>
-      </div>
-    </div>
+  <div class="sidebar">
 
-    <span class="nav-section-label">Navigation</span>
-
-    <nav class="sidebar-nav">
-      <button class="nav-item active"><i class="fa-solid fa-house"></i> Dashboard</button>
-      <button class="nav-item"><i class="fa-solid fa-hand-holding-heart"></i> My Donations</button>
-      <button class="nav-item"><i class="fa-solid fa-layer-group"></i> Projects</button>
-      <button class="nav-item"><i class="fa-solid fa-user"></i> Profile</button>
-      <button class="nav-item"><i class="fa-solid fa-gear"></i> Settings</button>
-    </nav>
-  </div>
-
-  <div class="sidebar-bottom">
-    <div class="user-row">
-      <div class="user-avatar">D</div>
-      <div>
-        <span class="user-name">Ahmed Hassan</span>
-        <span class="user-role">Donor Account</span>
-      </div>
-    </div>
-
-    <button class="logout-btn">
-      <i class="fa-solid fa-right-from-bracket"></i> Logout
-    </button>
-  </div>
-</aside>
-
-<main class="main">
-
-  <div class="topbar">
     <div>
-      <div class="page-title">Donor Dashboard</div>
-      <div class="page-sub">
-        Welcome back, Ahmed — your generosity makes a difference.
-      </div>
-    </div>
 
-    <div class="topbar-right">
-      <div class="date-pill">
-        <i class="fa-regular fa-calendar" style="margin-right:.4rem;"></i>
-        May 2024
-      </div>
-    </div>
-  </div>
+      <h2>🌉 Jasr El Kheir</h2>
 
-  <div class="stats-row">
+      <ul>
 
-    <div class="stat-card">
-      <div class="stat-ico ico-teal">
-        <i class="fa-solid fa-coins"></i>
-      </div>
+        <li onclick="showDashboard()">
 
-      <div>
-        <div class="stat-label">Total Donated</div>
-        <div class="stat-val">12,500</div>
-        <div class="stat-currency">Egyptian Pounds</div>
-      </div>
-    </div>
+          <i class="fa-solid fa-house"></i>
 
-    <div class="stat-card">
-      <div class="stat-ico ico-gold">
-        <i class="fa-solid fa-layer-group"></i>
-      </div>
+          Dashboard
 
-      <div>
-        <div class="stat-label">Projects Supported</div>
-        <div class="stat-val">4</div>
-        <div class="stat-currency">Active projects</div>
-      </div>
-    </div>
+        </li>
 
-    <div class="stat-card">
-      <div class="stat-ico ico-rose">
-        <i class="fa-solid fa-heart"></i>
-      </div>
+        <li onclick="showDonations()">
 
-      <div>
-        <div class="stat-label">Families Helped</div>
-        <div class="stat-val">17</div>
-        <div class="stat-currency">Lives impacted</div>
-      </div>
-    </div>
+          <i class="fa-solid fa-hand-holding-heart"></i>
 
-  </div>
+          Donations
 
-  <div class="two-col">
+        </li>
 
-    <div class="card">
+        <li onclick="showProfile()">
 
-      <div class="card-head">
-        <h3>Active Projects</h3>
-        <button class="btn-donate">View All</button>
-      </div>
+          <i class="fa-solid fa-user"></i>
 
-      <div class="card-body">
+          Profile
 
-        <div class="project-list">
+        </li>
 
-          <div class="project-item">
+        <li onclick="showSettings()">
 
-            <div class="project-top">
+          <i class="fa-solid fa-gear"></i>
 
-              <div>
-                <div class="project-name">Mosque Construction</div>
+          Settings
 
-                <div class="project-meta" style="margin-top:.25rem;">
-                  <span>Raised: <strong>42,000 EGP</strong></span>
-                  <span>Target: 50,000 EGP</span>
-                </div>
-              </div>
+        </li>
 
-              <span class="project-cat">Religious</span>
-            </div>
-
-            <div class="progress-bar">
-              <div class="progress-fill" style="width:84%"></div>
-            </div>
-
-            <div class="project-meta">
-              <span>84% funded</span>
-              <button class="btn-donate">Donate</button>
-            </div>
-
-          </div>
-
-          <div class="project-item">
-
-            <div class="project-top">
-
-              <div>
-                <div class="project-name">Orphan Sponsorship</div>
-
-                <div class="project-meta" style="margin-top:.25rem;">
-                  <span>Raised: <strong>18,200 EGP</strong></span>
-                  <span>Target: 40,000 EGP</span>
-                </div>
-              </div>
-
-              <span class="project-cat">Children</span>
-            </div>
-
-            <div class="progress-bar">
-              <div class="progress-fill gold" style="width:46%"></div>
-            </div>
-
-            <div class="project-meta">
-              <span>46% funded</span>
-              <button class="btn-donate">Donate</button>
-            </div>
-
-          </div>
-
-          <div class="project-item">
-
-            <div class="project-top">
-
-              <div>
-                <div class="project-name">Ramadan Feeding Program</div>
-
-                <div class="project-meta" style="margin-top:.25rem;">
-                  <span>Raised: <strong>9,500 EGP</strong></span>
-                  <span>Target: 15,000 EGP</span>
-                </div>
-              </div>
-
-              <span class="project-cat">Food Aid</span>
-            </div>
-
-            <div class="progress-bar">
-              <div class="progress-fill" style="width:63%"></div>
-            </div>
-
-            <div class="project-meta">
-              <span>63% funded</span>
-              <button class="btn-donate">Donate</button>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
+      </ul>
 
     </div>
 
-    <div class="card">
+    <button class="logout-btn"
+    onclick="logout()">
 
-      <div class="card-head">
-        <h3>Make a Donation</h3>
-      </div>
+      <i class="fa-solid fa-right-from-bracket"></i>
 
-      <div class="card-body">
+      Logout
 
-        <div class="donate-form">
-
-          <label>Select Project</label>
-
-          <select>
-            <option>Mosque Construction</option>
-            <option>Orphan Sponsorship</option>
-            <option>Ramadan Feeding Program</option>
-            <option>Medical Aid Fund</option>
-          </select>
-
-          <label>Quick Amount (EGP)</label>
-
-          <div class="amount-grid">
-            <button class="amount-chip active">100</button>
-            <button class="amount-chip">250</button>
-            <button class="amount-chip">500</button>
-            <button class="amount-chip">1,000</button>
-            <button class="amount-chip">2,500</button>
-            <button class="amount-chip">Custom</button>
-          </div>
-
-          <label>Custom Amount</label>
-
-          <input type="number" placeholder="Enter amount in EGP">
-
-          <label>Donation Note (optional)</label>
-
-          <textarea rows="2" placeholder="Leave a message of support…"></textarea>
-
-          <button class="btn-give" type="button">
-            <i class="fa-solid fa-heart"></i>
-            Donate Now
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
+    </button>
 
   </div>
 
-  <div class="full-col card">
+  <div class="main-content">
 
-    <div class="card-head">
-      <h3>Donation History</h3>
-    </div>
-
-    <table class="history-table">
-
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Project</th>
-          <th>Amount (EGP)</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr>
-          <td>12 May 2024</td>
-          <td>Mosque Construction</td>
-          <td>1,000</td>
-          <td><span class="status-badge status-completed">Completed</span></td>
-        </tr>
-
-        <tr>
-          <td>28 Apr 2024</td>
-          <td>Orphan Sponsorship</td>
-          <td>500</td>
-          <td><span class="status-badge status-completed">Completed</span></td>
-        </tr>
-
-        <tr>
-          <td>10 Apr 2024</td>
-          <td>Ramadan Feeding Program</td>
-          <td>250</td>
-          <td><span class="status-badge status-completed">Completed</span></td>
-        </tr>
-
-        <tr>
-          <td>01 Apr 2024</td>
-          <td>Medical Aid Fund</td>
-          <td>750</td>
-          <td><span class="status-badge status-pending">Processing</span></td>
-        </tr>
-
-      </tbody>
-
-    </table>
+    <div id="content"></div>
 
   </div>
 
-  <div class="full-col card">
-
-    <div class="card-head">
-      <h3>Your Impact</h3>
-    </div>
-
-    <div class="card-body">
-
-      <div class="impact-grid">
-
-        <div class="impact-card warm">
-          <div class="impact-icon">🍽️</div>
-          <div class="impact-num">340</div>
-          <div class="impact-label">Meals Provided</div>
-        </div>
-
-        <div class="impact-card cool">
-          <div class="impact-icon">📚</div>
-          <div class="impact-num">8</div>
-          <div class="impact-label">Students Supported</div>
-        </div>
-
-        <div class="impact-card warm">
-          <div class="impact-icon">🏥</div>
-          <div class="impact-num">3</div>
-          <div class="impact-label">Medical Cases Aided</div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</main>
+  <script src="donor dashboard.js"></script>
 
 </body>
 </html>
+
