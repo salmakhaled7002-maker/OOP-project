@@ -1,122 +1,158 @@
-window.onload = function(){
+class LoginPage {
 
-  let rememberedEmail =
-  localStorage.getItem("rememberEmail");
+    constructor() {
 
-  let rememberedPassword =
-  localStorage.getItem("rememberPassword");
+        this.form =
+            document.getElementById("loginForm");
 
-  if(rememberedEmail && rememberedPassword){
+        this.emailInput =
+            document.getElementById("emailInput");
 
-    document.querySelector(
-      'input[type="email"]'
-    ).value = rememberedEmail;
+        this.passwordInput =
+            document.getElementById("passwordInput");
 
-    document.querySelector(
-      'input[type="password"]'
-    ).value = rememberedPassword;
+        this.rememberCheckbox =
+            document.getElementById("remember");
 
-    document.getElementById(
-      "remember"
-    ).checked = true;
+        this.initialize();
+    }
 
-  }
+    initialize() {
 
-}
+        this.loadRememberedData();
 
-function login(){
+        this.addEvents();
+    }
 
-  let email =
-  document.querySelector(
-    'input[type="email"]'
-  ).value;
+    addEvents() {
 
-  let password =
-  document.querySelector(
-    'input[type="password"]'
-  ).value;
+        this.form.addEventListener(
+            "submit",
+            (event) => this.handleLogin(event)
+        );
+    }
 
-  let remember =
-  document.getElementById(
-    "remember"
-  ).checked;
+    loadRememberedData() {
 
-  let savedEmail =
-  localStorage.getItem(
-    "userEmail"
-  );
+        const rememberedEmail =
+            localStorage.getItem("rememberEmail");
 
-  let savedPassword =
-  localStorage.getItem(
-    "userPassword"
-  );
+        const rememberedPassword =
+            localStorage.getItem("rememberPassword");
 
-  let savedRole =
-  localStorage.getItem(
-    "userRole"
-  );
+        if(rememberedEmail && rememberedPassword){
 
-  if(email === "" || password === ""){
+            this.emailInput.value =
+                rememberedEmail;
 
-    alert(
-      "Please enter email and password"
-    );
+            this.passwordInput.value =
+                rememberedPassword;
 
-  }
+            this.rememberCheckbox.checked =
+                true;
+        }
+    }
 
-  else if(email === savedEmail &&
-          password === savedPassword){
+    handleLogin(event) {
 
-    if(remember){
+        event.preventDefault();
 
-      localStorage.setItem(
-        "rememberEmail",
-        email
-      );
+        const email =
+            this.emailInput.value.trim();
 
-      localStorage.setItem(
-        "rememberPassword",
+        const password =
+            this.passwordInput.value.trim();
+
+        const remember =
+            this.rememberCheckbox.checked;
+
+        const savedEmail =
+            localStorage.getItem("userEmail");
+
+        const savedPassword =
+            localStorage.getItem("userPassword");
+
+        const savedRole =
+            localStorage.getItem("userRole");
+
+        if(email === "" || password === ""){
+
+            alert(
+                "Please enter email and password"
+            );
+
+            return;
+        }
+
+        if(email === savedEmail &&
+           password === savedPassword){
+
+            this.handleRememberMe(
+                remember,
+                email,
+                password
+            );
+
+            alert(
+                "Login Successful"
+            );
+
+            this.redirectUser(savedRole);
+        }
+
+        else{
+
+            alert(
+                "Wrong Email Or Password"
+            );
+        }
+    }
+
+    handleRememberMe(
+        remember,
+        email,
         password
-      );
+    ){
 
+        if(remember){
+
+            localStorage.setItem(
+                "rememberEmail",
+                email
+            );
+
+            localStorage.setItem(
+                "rememberPassword",
+                password
+            );
+        }
+
+        else{
+
+            localStorage.removeItem(
+                "rememberEmail"
+            );
+
+            localStorage.removeItem(
+                "rememberPassword"
+            );
+        }
     }
 
-    else{
+    redirectUser(role) {
 
-      localStorage.removeItem(
-        "rememberEmail"
-      );
+        if(role === "donor"){
 
-      localStorage.removeItem(
-        "rememberPassword"
-      );
+            window.location.href =
+                "donor dashboard.html";
+        }
 
+        else{
+
+            window.location.href =
+                "recipient dashboard.html";
+        }
     }
-
-    alert("Login Successful");
-
-    if(savedRole === "donor"){
-
-      window.location.href =
-      "donor dashboard.html";
-
-    }
-
-    else{
-
-      window.location.href =
-      "recipient dashboard.html";
-
-    }
-
-  }
-
-  else{
-
-    alert(
-      "Wrong Email Or Password"
-    );
-
-  }
-
 }
+
+new LoginPage();

@@ -1,61 +1,135 @@
-let role1 = document.getElementById("role1");
-let role2 = document.getElementById("role2");
+class SignupPage {
 
-role1.onclick = function () {
+    constructor() {
 
-    role1.classList.add("active");
-    role2.classList.remove("active");
+        this.form =
+            document.getElementById("signupForm");
 
-    role1.querySelector("input").checked = true;
+        this.nameInput =
+            document.getElementById("nameInput");
 
-}
+        this.emailInput =
+            document.getElementById("emailInput");
 
-role2.onclick = function () {
+        this.passwordInput =
+            document.getElementById("passwordInput");
 
-    role2.classList.add("active");
-    role1.classList.remove("active");
+        this.role1 =
+            document.getElementById("role1");
 
-    role2.querySelector("input").checked = true;
+        this.role2 =
+            document.getElementById("role2");
 
-}
+        this.selectedRole =
+            "donor";
 
-function signup(){
-
-    let name =
-    document.querySelector('input[type="text"]').value;
-
-    let email =
-    document.querySelector('input[type="email"]').value;
-
-    let password =
-    document.querySelector('input[type="password"]').value;
-
-    let role = "donor";
-
-    if(role2.classList.contains("active")){
-
-        role = "recipient";
-
+        this.initialize();
     }
 
-    if(name === "" || email === "" || password === ""){
+    initialize() {
 
-        alert("Please fill all fields");
-
+        this.addEvents();
     }
 
-    else{
+    addEvents() {
 
-        localStorage.setItem("userEmail", email);
+        this.role1.addEventListener(
+            "click",
+            () => this.selectDonor()
+        );
 
-        localStorage.setItem("userPassword", password);
+        this.role2.addEventListener(
+            "click",
+            () => this.selectRecipient()
+        );
 
-        localStorage.setItem("userRole", role);
-
-        alert("Account Created Successfully");
-
-        window.location.href = "login.html";
-
+        this.form.addEventListener(
+            "submit",
+            (event) => this.handleSignup(event)
+        );
     }
 
+    selectDonor() {
+
+        this.selectedRole =
+            "donor";
+
+        this.role1.classList.add("active");
+
+        this.role2.classList.remove("active");
+
+        this.role1.querySelector(
+            "input"
+        ).checked = true;
+    }
+
+    selectRecipient() {
+
+        this.selectedRole =
+            "recipient";
+
+        this.role2.classList.add("active");
+
+        this.role1.classList.remove("active");
+
+        this.role2.querySelector(
+            "input"
+        ).checked = true;
+    }
+
+    handleSignup(event) {
+
+        event.preventDefault();
+
+        const name =
+            this.nameInput.value.trim();
+
+        const email =
+            this.emailInput.value.trim();
+
+        const password =
+            this.passwordInput.value.trim();
+
+        if(
+            name === "" ||
+            email === "" ||
+            password === ""
+        ){
+
+            alert(
+                "Please fill all fields"
+            );
+
+            return;
+        }
+
+        localStorage.setItem(
+            "userName",
+            name
+        );
+
+        localStorage.setItem(
+            "userEmail",
+            email
+        );
+
+        localStorage.setItem(
+            "userPassword",
+            password
+        );
+
+        localStorage.setItem(
+            "userRole",
+            this.selectedRole
+        );
+
+        alert(
+            "Account Created Successfully"
+        );
+
+        window.location.href =
+            "login.html";
+    }
 }
+
+new SignupPage();

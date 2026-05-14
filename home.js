@@ -1,8 +1,31 @@
+class HomePage {
 
+    constructor() {
 
-function startApp(){
+        this.startButton =
+            document.getElementById("startBtn");
 
-  window.location.href =
-  "contact and about us.html";
+        this.initialize();
+    }
 
+    initialize() {
+
+        this.addEvents();
+    }
+
+    addEvents() {
+
+        this.startButton.addEventListener(
+            "click",
+            () => this.startApp()
+        );
+    }
+
+    startApp() {
+
+        window.location.href =
+            "contact and about us.html";
+    }
 }
+
+new HomePage();

@@ -1,73 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Sign Up</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="signup.css">
+    <title>
+        Sign Up
+    </title>
 
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="signup.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
 
 <body>
 
-    <div class="container">
+    <main class="container">
 
         <div class="logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                 alt="User Icon">
+
         </div>
 
-        <h1>Jasr El Kheir</h1>
+        <h1>
+            Jasr El Kheir
+        </h1>
 
-        <div class="signup-card">
+        <section class="signup-card">
 
-            <h2>Sign Up</h2>
+            <h2>
+                Sign Up
+            </h2>
 
-            <p>Create an account to get started</p>
+            <p class="subtitle">
+                Create an account to get started
+            </p>
 
-            <form>
+            <form id="signupForm">
 
-                <label>Full Name</label>
-                <input type="text" placeholder="Your full name">
+                <label for="nameInput">
+                    Full Name
+                </label>
 
-                <label>Email</label>
-                <input type="email" placeholder="your@email.com">
+                <input type="text"
+                       id="nameInput"
+                       placeholder="Your full name">
 
-                <label>Password</label>
-                <input type="password" placeholder="Enter password">
+                <label for="emailInput">
+                    Email
+                </label>
 
-                <label>Role Selection</label>
+                <input type="email"
+                       id="emailInput"
+                       placeholder="your@email.com">
 
-                <div class="role-option active" id="role1">
-                    <input type="radio" name="role" checked>
-                    <span>🤝 Donor</span>
+                <label for="passwordInput">
+                    Password
+                </label>
+
+                <input type="password"
+                       id="passwordInput"
+                       placeholder="Enter password">
+
+                <label>
+                    Role Selection
+                </label>
+
+                <div class="role-option active"
+                     id="role1">
+
+                    <input type="radio"
+                           name="role"
+                           checked>
+
+                    <span>
+                        🤝 Donor
+                    </span>
+
                 </div>
 
-                <div class="role-option" id="role2">
-                    <input type="radio" name="role">
-                    <span>🎁 Recipient</span>
+                <div class="role-option"
+                     id="role2">
+
+                    <input type="radio"
+                           name="role">
+
+                    <span>
+                        🎁 Recipient
+                    </span>
+
                 </div>
 
-                <button type="button" onclick="signup()">
+                <button type="submit"
+                        id="signupBtn">
+
                     <i class="fa-solid fa-user-plus"></i>
+
                     Sign Up
+
                 </button>
 
             </form>
 
             <div class="login-text">
+
                 Already have an account?
-                <a href="login.html">Sign In</a>
+
+                <a href="login.html">
+                    Sign In
+                </a>
+
             </div>
 
-        </div>
+        </section>
 
-    </div>
+    </main>
 
     <script src="signup.js"></script>
 
 </body>
+
 </html>

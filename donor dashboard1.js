@@ -1,524 +1,634 @@
-let content =
-document.getElementById("content");
+class DonorDashboard {
 
-let balance =
-Number(localStorage.getItem("balance")) || 0;
+    constructor() {
 
-let totalDonations =
-Number(localStorage.getItem("totalDonations")) || 0;
+        this.content =
+            document.getElementById("content");
 
-let familiesHelped =
-Number(localStorage.getItem("familiesHelped")) || 0;
+        this.balance =
+            Number(
+                localStorage.getItem("balance")
+            ) || 0;
 
-let history =
-JSON.parse(localStorage.getItem("history")) || [];
+        this.totalDonations =
+            Number(
+                localStorage.getItem("totalDonations")
+            ) || 0;
 
-function saveData(){
+        this.familiesHelped =
+            Number(
+                localStorage.getItem("familiesHelped")
+            ) || 0;
 
-  localStorage.setItem(
-    "balance",
-    balance
-  );
+        this.history =
+            JSON.parse(
+                localStorage.getItem("history")
+            ) || [];
 
-  localStorage.setItem(
-    "totalDonations",
-    totalDonations
-  );
+        this.initialize();
+    }
 
-  localStorage.setItem(
-    "familiesHelped",
-    familiesHelped
-  );
+    initialize() {
 
-  localStorage.setItem(
-    "history",
-    JSON.stringify(history)
-  );
+        this.addEvents();
 
-}
+        this.showDashboard();
+    }
 
-function showDashboard(){
+    addEvents() {
 
-  let historyHTML = "";
+        document
+        .getElementById("dashboardBtn")
+        .addEventListener(
+            "click",
+            () => this.showDashboard()
+        );
 
-  for(let i = 0; i < history.length; i++){
+        document
+        .getElementById("donationsBtn")
+        .addEventListener(
+            "click",
+            () => this.showDonations()
+        );
 
-    historyHTML += `
+        document
+        .getElementById("profileBtn")
+        .addEventListener(
+            "click",
+            () => this.showProfile()
+        );
 
-      <div class="request-card">
+        document
+        .getElementById("settingsBtn")
+        .addEventListener(
+            "click",
+            () => this.showSettings()
+        );
 
-        <h3>
-          ${history[i].title}
-        </h3>
+        document
+        .getElementById("logoutBtn")
+        .addEventListener(
+            "click",
+            () => this.logout()
+        );
+    }
 
-        <p>
-          ${history[i].description}
+    saveData() {
+
+        localStorage.setItem(
+            "balance",
+            this.balance
+        );
+
+        localStorage.setItem(
+            "totalDonations",
+            this.totalDonations
+        );
+
+        localStorage.setItem(
+            "familiesHelped",
+            this.familiesHelped
+        );
+
+        localStorage.setItem(
+            "history",
+            JSON.stringify(this.history)
+        );
+    }
+
+    showDashboard() {
+
+        let historyHTML = "";
+
+        for(
+            let i = 0;
+            i < this.history.length;
+            i++
+        ){
+
+            historyHTML += `
+
+            <div class="request-card">
+
+                <h3>
+                    ${this.history[i].title}
+                </h3>
+
+                <p>
+                    ${this.history[i].description}
+                </p>
+
+            </div>
+
+            `;
+        }
+
+        if(this.history.length === 0){
+
+            historyHTML = `
+
+            <div class="request-card">
+
+                <p>
+                    No donations yet
+                </p>
+
+            </div>
+
+            `;
+        }
+
+        this.content.innerHTML = `
+
+        <h1 class="title">
+            Welcome, Donor 🌱
+        </h1>
+
+        <p class="subtitle">
+            Give what you can,
+            change someone's life
         </p>
 
-      </div>
+        <div class="cards">
 
-    `;
+            <div class="card">
 
-  }
+                <i class="fa-solid fa-wallet"></i>
 
-  if(history.length === 0){
+                <h2>
+                    $${this.balance}
+                </h2>
 
-    historyHTML = `
+                <p>
+                    Wallet Balance
+                </p>
 
-      <div class="request-card">
+            </div>
 
-        <p>
-          No donations yet
-        </p>
+            <div class="card">
 
-      </div>
+                <i class="fa-solid fa-heart"></i>
 
-    `;
+                <h2>
+                    ${this.totalDonations}
+                </h2>
 
-  }
+                <p>
+                    Total Donations
+                </p>
 
-  content.innerHTML = `
+            </div>
 
-    <h1 class="title">
-      Welcome, Donor 🌱
-    </h1>
+            <div class="card">
 
-    <p class="subtitle">
-      Give what you can, change someone's life
-    </p>
+                <i class="fa-solid fa-users"></i>
 
-    <div class="cards">
+                <h2>
+                    ${this.familiesHelped}
+                </h2>
 
-      <div class="card">
+                <p>
+                    Families Helped
+                </p>
 
-        <i class="fa-solid fa-wallet"></i>
+            </div>
 
-        <h2>$${balance}</h2>
-
-        <p>Wallet Balance</p>
-
-      </div>
-
-      <div class="card">
-
-        <i class="fa-solid fa-heart"></i>
-
-        <h2>${totalDonations}</h2>
-
-        <p>Total Donations</p>
-
-      </div>
-
-      <div class="card">
-
-        <i class="fa-solid fa-users"></i>
-
-        <h2>${familiesHelped}</h2>
-
-        <p>Families Helped</p>
-
-      </div>
-
-    </div>
-
-    <br><br>
-
-    <div class="requests-box">
-
-      <h2>
-        Donation History
-      </h2>
-
-      ${historyHTML}
-
-    </div>
-
-  `;
-
-}
-
-function showDonations(){
-
-  content.innerHTML = `
-
-    <div class="requests-box">
-
-      <h1 class="title">
-        Donation Requests
-      </h1>
-
-      <div class="request-card">
-
-        <h3>
-          🍲 Food Donation
-        </h3>
-
-        <p>
-          Family needs food supplies
-        </p>
-
-        <input type="number"
-        id="foodAmount"
-        placeholder="Number of meals">
+        </div>
 
         <br><br>
 
-        <button onclick="donateFood()">
-          Donate Food
-        </button>
+        <div class="requests-box">
 
-      </div>
+            <h2>
+                Donation History
+            </h2>
 
-      <div class="request-card">
+            ${historyHTML}
 
-        <h3>
-          👕 Clothes Donation
-        </h3>
+        </div>
 
-        <p>
-          Children need winter clothes
-        </p>
+        `;
+    }
 
-        <input type="number"
-        id="clothesAmount"
-        placeholder="Number of clothes">
+    showDonations() {
 
-        <br><br>
+        this.content.innerHTML = `
 
-        <button onclick="donateClothes()">
-          Donate Clothes
-        </button>
+        <div class="requests-box">
 
-      </div>
+            <h1 class="title">
+                Donation Requests
+            </h1>
 
-      <div class="request-card">
+            <div class="request-card">
 
-        <h3>
-          💵 Money Donation
-        </h3>
+                <h3>
+                    🍲 Food Donation
+                </h3>
 
-        <p>
-          Donate from wallet balance
-        </p>
+                <p>
+                    Family needs food supplies
+                </p>
 
-        <button onclick="donateMoney()">
-          Donate $50
-        </button>
+                <input type="number"
+                       id="foodAmount"
+                       placeholder="Number of meals">
 
-      </div>
+                <br><br>
 
-    </div>
+                <button id="foodBtn">
+                    Donate Food
+                </button>
 
-  `;
+            </div>
 
+            <div class="request-card">
+
+                <h3>
+                    👕 Clothes Donation
+                </h3>
+
+                <p>
+                    Children need winter clothes
+                </p>
+
+                <input type="number"
+                       id="clothesAmount"
+                       placeholder="Number of clothes">
+
+                <br><br>
+
+                <button id="clothesBtn">
+                    Donate Clothes
+                </button>
+
+            </div>
+
+            <div class="request-card">
+
+                <h3>
+                    💵 Money Donation
+                </h3>
+
+                <p>
+                    Donate from wallet balance
+                </p>
+
+                <button id="moneyBtn">
+                    Donate $50
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+        document
+        .getElementById("foodBtn")
+        .addEventListener(
+            "click",
+            () => this.donateFood()
+        );
+
+        document
+        .getElementById("clothesBtn")
+        .addEventListener(
+            "click",
+            () => this.donateClothes()
+        );
+
+        document
+        .getElementById("moneyBtn")
+        .addEventListener(
+            "click",
+            () => this.donateMoney()
+        );
+    }
+
+    showProfile() {
+
+        const email =
+            localStorage.getItem("userEmail");
+
+        this.content.innerHTML = `
+
+        <div class="profile-box">
+
+            <h1 class="title">
+                My Profile
+            </h1>
+
+            <br>
+
+            <p>
+
+                <strong>Email:</strong>
+
+                ${email}
+
+            </p>
+
+            <p>
+
+                <strong>Wallet Balance:</strong>
+
+                $${this.balance}
+
+            </p>
+
+            <br>
+
+            <h3>
+                Add Money To Wallet
+            </h3>
+
+            <br>
+
+            <input type="number"
+                   id="amount"
+                   placeholder="Enter amount">
+
+            <br>
+
+            <button class="wallet-btn"
+                    id="fawryBtn">
+
+                Fawry
+
+            </button>
+
+            <button class="wallet-btn"
+                    id="instapayBtn">
+
+                InstaPay
+
+            </button>
+
+            <button class="wallet-btn"
+                    id="creditBtn">
+
+                Credit Card
+
+            </button>
+
+        </div>
+
+        `;
+
+        document
+        .getElementById("fawryBtn")
+        .addEventListener(
+            "click",
+            () => this.addBalance("Fawry")
+        );
+
+        document
+        .getElementById("instapayBtn")
+        .addEventListener(
+            "click",
+            () => this.addBalance("InstaPay")
+        );
+
+        document
+        .getElementById("creditBtn")
+        .addEventListener(
+            "click",
+            () => this.addBalance("Credit Card")
+        );
+    }
+
+    showSettings() {
+
+        this.content.innerHTML = `
+
+        <div class="settings-box">
+
+            <h1 class="title">
+                Settings
+            </h1>
+
+            <br>
+
+            <label>
+                Change Email
+            </label>
+
+            <br><br>
+
+            <input type="email"
+                   placeholder="New Email">
+
+            <br>
+
+            <label>
+                Change Password
+            </label>
+
+            <br><br>
+
+            <input type="password"
+                   placeholder="New Password">
+
+            <br>
+
+            <label>
+                Payment Method
+            </label>
+
+            <br><br>
+
+            <select>
+
+                <option>
+                    Fawry
+                </option>
+
+                <option>
+                    InstaPay
+                </option>
+
+                <option>
+                    Credit Card
+                </option>
+
+            </select>
+
+            <br><br>
+
+            <button class="save-btn"
+                    id="saveBtn">
+
+                Save Changes
+
+            </button>
+
+        </div>
+
+        `;
+
+        document
+        .getElementById("saveBtn")
+        .addEventListener(
+            "click",
+            () => this.saveSettings()
+        );
+    }
+
+    donateMoney() {
+
+        if(this.balance < 50){
+
+            alert(
+                "Wallet balance is low"
+            );
+
+            return;
+        }
+
+        this.balance -= 50;
+
+        this.totalDonations++;
+
+        this.familiesHelped++;
+
+        this.history.push({
+
+            title:"💵 Money Donation",
+
+            description:
+            "You donated $50"
+        });
+
+        this.saveData();
+
+        alert(
+            "Money Donation Successful"
+        );
+
+        this.showDashboard();
+    }
+
+    donateFood() {
+
+        const meals =
+            document
+            .getElementById("foodAmount")
+            .value;
+
+        if(meals === ""){
+
+            alert(
+                "Enter meals number"
+            );
+
+            return;
+        }
+
+        this.totalDonations++;
+
+        this.familiesHelped++;
+
+        this.history.push({
+
+            title:"🍲 Food Donation",
+
+            description:
+            "You donated " +
+            meals +
+            " meals"
+        });
+
+        this.saveData();
+
+        alert(
+            "Food Donation Successful"
+        );
+
+        this.showDashboard();
+    }
+
+    donateClothes() {
+
+        const clothes =
+            document
+            .getElementById("clothesAmount")
+            .value;
+
+        if(clothes === ""){
+
+            alert(
+                "Enter clothes number"
+            );
+
+            return;
+        }
+
+        this.totalDonations++;
+
+        this.familiesHelped++;
+
+        this.history.push({
+
+            title:"👕 Clothes Donation",
+
+            description:
+            "You donated " +
+            clothes +
+            " clothes"
+        });
+
+        this.saveData();
+
+        alert(
+            "Clothes Donation Successful"
+        );
+
+        this.showDashboard();
+    }
+
+    addBalance(method) {
+
+        const amount =
+            Number(
+                document
+                .getElementById("amount")
+                .value
+            );
+
+        if(amount <= 0){
+
+            alert(
+                "Enter valid amount"
+            );
+
+            return;
+        }
+
+        this.balance += amount;
+
+        this.saveData();
+
+        alert(
+            "Balance Added By " +
+            method
+        );
+
+        this.showProfile();
+    }
+
+    saveSettings() {
+
+        alert(
+            "Settings Updated"
+        );
+    }
+
+    logout() {
+
+        window.location.href =
+        "login.html";
+    }
 }
 
-function showProfile(){
-
-  let email =
-  localStorage.getItem("userEmail");
-
-  content.innerHTML = `
-
-    <div class="profile-box">
-
-      <h1 class="title">
-        My Profile
-      </h1>
-
-      <br>
-
-      <p>
-
-        <strong>Email:</strong>
-
-        ${email}
-
-      </p>
-
-      <p>
-
-        <strong>Wallet Balance:</strong>
-
-        $${balance}
-
-      </p>
-
-      <br>
-
-      <h3>
-        Add Money To Wallet
-      </h3>
-
-      <br>
-
-      <input type="number"
-      id="amount"
-      placeholder="Enter amount">
-
-      <br>
-
-      <button class="wallet-btn"
-      onclick="fawry()">
-
-        Fawry
-
-      </button>
-
-      <button class="wallet-btn"
-      onclick="instapay()">
-
-        InstaPay
-
-      </button>
-
-      <button class="wallet-btn"
-      onclick="credit()">
-
-        Credit Card
-
-      </button>
-
-    </div>
-
-  `;
-
-}
-
-function showSettings(){
-
-  content.innerHTML = `
-
-    <div class="settings-box">
-
-      <h1 class="title">
-        Settings
-      </h1>
-
-      <br>
-
-      <label>
-        Change Email
-      </label>
-
-      <br><br>
-
-      <input type="email"
-      placeholder="New Email">
-
-      <br>
-
-      <label>
-        Change Password
-      </label>
-
-      <br><br>
-
-      <input type="password"
-      placeholder="New Password">
-
-      <br>
-
-      <label>
-        Payment Method
-      </label>
-
-      <br><br>
-
-      <select>
-
-        <option>
-          Fawry
-        </option>
-
-        <option>
-          InstaPay
-        </option>
-
-        <option>
-          Credit Card
-        </option>
-
-      </select>
-
-      <br><br>
-
-      <button class="save-btn"
-      onclick="saveSettings()">
-
-        Save Changes
-
-      </button>
-
-    </div>
-
-  `;
-
-}
-
-function donateMoney(){
-
-  if(balance < 50){
-
-    alert("Wallet balance is low");
-
-  }
-
-  else{
-
-    balance -= 50;
-
-    totalDonations++;
-
-    familiesHelped++;
-
-    history.push({
-
-      title : "💵 Money Donation",
-
-      description :
-      "You donated $50"
-
-    });
-
-    saveData();
-
-    alert("Money Donation Successful");
-
-    showDashboard();
-
-  }
-
-}
-
-function donateFood(){
-
-  let meals =
-  document.getElementById("foodAmount").value;
-
-  if(meals === ""){
-
-    alert("Enter meals number");
-
-  }
-
-  else{
-
-    totalDonations++;
-
-    familiesHelped++;
-
-    history.push({
-
-      title : "🍲 Food Donation",
-
-      description :
-      "You donated " + meals + " meals"
-
-    });
-
-    saveData();
-
-    alert("Food Donation Successful");
-
-    showDashboard();
-
-  }
-
-}
-
-function donateClothes(){
-
-  let clothes =
-  document.getElementById("clothesAmount").value;
-
-  if(clothes === ""){
-
-    alert("Enter clothes number");
-
-  }
-
-  else{
-
-    totalDonations++;
-
-    familiesHelped++;
-
-    history.push({
-
-      title : "👕 Clothes Donation",
-
-      description :
-      "You donated " + clothes + " clothes"
-
-    });
-
-    saveData();
-
-    alert("Clothes Donation Successful");
-
-    showDashboard();
-
-  }
-
-}
-
-function fawry(){
-
-  let amount =
-  document.getElementById("amount").value;
-
-  balance += Number(amount);
-
-  saveData();
-
-  alert("Balance Added By Fawry");
-
-  showProfile();
-
-}
-
-function instapay(){
-
-  let amount =
-  document.getElementById("amount").value;
-
-  balance += Number(amount);
-
-  saveData();
-
-  alert("Balance Added By InstaPay");
-
-  showProfile();
-
-}
-
-function credit(){
-
-  let amount =
-  document.getElementById("amount").value;
-
-  balance += Number(amount);
-
-  saveData();
-
-  alert("Balance Added By Credit Card");
-
-  showProfile();
-
-}
-
-function saveSettings(){
-
-  alert("Settings Updated");
-
-}
-
-function logout(){
-
-  window.location.href =
-  "login.html";
-
-}
-
-showDashboard();
+new DonorDashboard();

@@ -1,89 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipient Dashboard - Jasr El Kheir</title>
-    <link rel="stylesheet" href="recipient.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Recipient Dashboard - Jasr El Kheir
+    </title>
+
+    <link rel="stylesheet"
+          href="recipient.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
+
 <body>
+
     <div class="dashboard-container">
+
         <aside class="sidebar">
+
             <div class="logo-section">
-                <div class="logo-circle">🌉</div>
-                <h2>Jasr El Kheir</h2>
+
+                <div class="logo-circle">
+                    🌉
+                </div>
+
+                <h2>
+                    Jasr El Kheir
+                </h2>
+
             </div>
+
             <nav>
-                <a href="#" class="active"><i class="fa-solid fa-house"></i> Overview</a>
-                <a href="#" onclick="toggleModal('caseModal')"><i class="fa-solid fa-plus-circle"></i> Submit New Case</a>
-                <a href="login.html" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+
+                <a href="#"
+                   class="active">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Overview
+
+                </a>
+
+                <a href="#"
+                   id="openModalBtn">
+
+                    <i class="fa-solid fa-plus-circle"></i>
+
+                    Submit New Case
+
+                </a>
+
+                <a href="login.html"
+                   class="logout">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Logout
+
+                </a>
+
             </nav>
+
         </aside>
 
         <main class="main-content">
+
             <header>
-                <h1>Welcome, <span id="displayUserName">Recipient</span></h1>
-                <p>Track your aid requests and manage your cases.</p>
+
+                <h1>
+
+                    Welcome,
+
+                    <span id="displayUserName">
+                        Recipient
+                    </span>
+
+                </h1>
+
+                <p>
+                    Track your aid requests and manage your cases.
+                </p>
+
             </header>
 
-            <div class="status-grid">
+            <section class="status-grid">
+
                 <div class="card">
-                    <h3>Active Cases</h3>
-                    <div class="amount" id="caseCount">0</div>
-                    <p class="small-text">Total cases submitted</p>
+
+                    <h3>
+                        Active Cases
+                    </h3>
+
+                    <div class="amount"
+                         id="caseCount">
+
+                        0
+
+                    </div>
+
+                    <p class="small-text">
+                        Total cases submitted
+                    </p>
+
                 </div>
-                
+
                 <div class="card">
-                    <h3>Aid Received</h3>
-                    <div class="amount"><span id="totalAid">0.00</span> EGP</div>
-                    <p class="small-text">Total amount for all cases</p>
+
+                    <h3>
+                        Aid Received
+                    </h3>
+
+                    <div class="amount">
+
+                        <span id="totalAid">
+                            0.00
+                        </span>
+
+                        EGP
+
+                    </div>
+
+                    <p class="small-text">
+                        Total amount for all cases
+                    </p>
+
                 </div>
-            </div>
+
+            </section>
 
             <section class="table-section">
-                <h2>Your Submitted Cases</h2>
+
+                <h2>
+                    Your Submitted Cases
+                </h2>
+
                 <table>
+
                     <thead>
+
                         <tr>
-                            <th>Case ID</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                            <th>Status</th>
+
+                            <th>
+                                Case ID
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
                         </tr>
+
                     </thead>
+
                     <tbody id="caseTableBody">
-                        </tbody>
+
+                    </tbody>
+
                 </table>
+
             </section>
+
         </main>
+
     </div>
 
-    <div id="caseModal" class="modal">
+    <div id="caseModal"
+         class="modal">
+
         <div class="modal-content">
-            <span class="close" onclick="toggleModal('caseModal')">&times;</span>
-            <h2>Submit Beneficiary Case</h2>
+
+            <span class="close"
+                  id="closeModalBtn">
+
+                &times;
+
+            </span>
+
+            <h2>
+                Submit Beneficiary Case
+            </h2>
+
             <form id="beneficiaryForm">
-                <label>Case Title</label>
-                <input type="text" id="caseTitle" placeholder="e.g., Medical Support" required>
-                
-                <label>Requested Amount (EGP)</label>
-                <input type="number" id="caseAmount" placeholder="5000" required>
 
-                <label>Financial Need Description</label>
-                <textarea id="caseDetails" rows="4" placeholder="Explain your situation..." required></textarea>
+                <label for="caseTitle">
+                    Case Title
+                </label>
 
-                <label>Supporting Documents (Mandatory)</label>
-                <input type="file" id="caseFile" required>
-                <p class="file-hint" style="font-size: 12px; color: #666; margin-bottom: 15px;">Upload ID or medical reports.</p>
+                <input type="text"
+                       id="caseTitle"
+                       placeholder="e.g., Medical Support"
+                       required>
 
-                <button type="button" class="btn-submit" onclick="submitNewCase()">
+                <label for="caseAmount">
+                    Requested Amount (EGP)
+                </label>
+
+                <input type="number"
+                       id="caseAmount"
+                       placeholder="5000"
+                       required>
+
+                <label for="caseDetails">
+                    Financial Need Description
+                </label>
+
+                <textarea id="caseDetails"
+                          rows="4"
+                          placeholder="Explain your situation..."
+                          required></textarea>
+
+                <label for="caseFile">
+                    Supporting Documents
+                </label>
+
+                <input type="file"
+                       id="caseFile"
+                       required>
+
+                <p class="file-hint">
+                    Upload ID or medical reports.
+                </p>
+
+                <button type="submit"
+                        class="btn-submit">
+
                     Submit Application
+
                 </button>
+
             </form>
+
         </div>
+
     </div>
 
     <script src="recipient.js"></script>
+
 </body>
+
 </html>

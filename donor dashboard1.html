@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <meta charset="UTF-8">
 
   <meta name="viewport"
-  content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0">
 
-  <title>Donor Dashboard</title>
-
-  <link rel="stylesheet" href="donor dashboard1.css">
+  <title>
+    Donor Dashboard
+  </title>
 
   <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        href="donor dashboard1.css">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
@@ -22,11 +26,13 @@
 
     <div>
 
-      <h2>🌉 Jasr El Kheir</h2>
+      <h2>
+        🌉 Jasr El Kheir
+      </h2>
 
       <ul>
 
-        <li onclick="showDashboard()">
+        <li id="dashboardBtn">
 
           <i class="fa-solid fa-house"></i>
 
@@ -34,7 +40,7 @@
 
         </li>
 
-        <li onclick="showDonations()">
+        <li id="donationsBtn">
 
           <i class="fa-solid fa-hand-holding-heart"></i>
 
@@ -42,7 +48,7 @@
 
         </li>
 
-        <li onclick="showProfile()">
+        <li id="profileBtn">
 
           <i class="fa-solid fa-user"></i>
 
@@ -50,7 +56,7 @@
 
         </li>
 
-        <li onclick="showSettings()">
+        <li id="settingsBtn">
 
           <i class="fa-solid fa-gear"></i>
 
@@ -63,7 +69,7 @@
     </div>
 
     <button class="logout-btn"
-    onclick="logout()">
+            id="logoutBtn">
 
       <i class="fa-solid fa-right-from-bracket"></i>
 
@@ -82,4 +88,5 @@
   <script src="donor dashboard1.js"></script>
 
 </body>
+
 </html>
