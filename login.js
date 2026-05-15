@@ -144,7 +144,7 @@ class LoginPage {
         if(role === "donor"){
 
             window.location.href =
-                "donor dashboard.html";
+                "donor dashboard1.html";
         }
 
         else{
