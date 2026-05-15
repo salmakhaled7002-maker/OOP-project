@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Reports — Jasr Al-Khayr</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="adminreport.css" />
+</head>
+<body>
+
+  
+  <aside class="sidebar">
+
+    <div class="brand-area">
+      <div class="brand-icon">JK</div>
+
+      <div class="brand-text">
+        <span class="brand-ar">جسر الخير</span>
+        <span class="brand-en">Jasr Al-Khayr</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <span class="nav-label">Main</span>
+
+      <a href="#" class="nav-item">
+        Dashboard
+      </a>
+
+      <a href="#" class="nav-item">
+        Projects
+      </a>
+
+      <a href="#" class="nav-item active">
+        Financial Reports
+      </a>
+
+      <a href="#" class="nav-item">
+        Cases
+      </a>
+
+      <a href="#" class="nav-item">
+        Donors
+      </a>
+
+      <span class="nav-label">System</span>
+
+      <a href="#" class="nav-item">
+        Settings
+      </a>
+
+      <a href="#" class="nav-item logout">
+        Logout
+      </a>
+
+    </nav>
+
+  </aside>
+
+
+  <!-- ═════════════════ MAIN CONTENT ═════════════════ -->
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+      <div>
+        <h1 class="page-title">Financial Reports</h1>
+        <span class="page-subtitle">
+          Monitor donations, disbursements, and charity performance.
+        </span>
+      </div>
+
+      <div class="topbar-actions">
+
+        <select id="periodSelect">
+          <option value="month">This Month</option>
+          <option value="quarter">This Quarter</option>
+          <option value="year">This Year</option>
+        </select>
+
+        <button class="download-btn" id="downloadBtn">
+          Download Report
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- STATISTICS -->
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <span class="stat-title">Total Donations</span>
+        <span class="stat-value" id="totalDonations">0</span>
+        <span class="stat-change positive">↑ 18% from last month</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-title">Funds Disbursed</span>
+        <span class="stat-value" id="fundsDisbursed">0</span>
+        <span class="stat-change positive">↑ 11% from last month</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-title">Active Projects</span>
+        <span class="stat-value" id="activeProjects">0</span>
+        <span class="stat-change neutral">5 ongoing projects</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-title">Pending Cases</span>
+        <span class="stat-value" id="pendingCases">0</span>
+        <span class="stat-change negative">Needs admin review</span>
+      </div>
+
+    </section>
+
+
+    <!-- CHART + SUMMARY -->
+    <section class="content-grid">
+
+      <!-- CHART -->
+      <div class="card chart-card">
+
+        <div class="card-header">
+          <h3>Project Funding Analytics</h3>
+          <span>Updated in real time</span>
+        </div>
+
+        <div class="chart-wrapper">
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+
+      </div>
+
+
+      <!-- SUMMARY -->
+      <div class="card summary-card">
+
+        <div class="card-header">
+          <h3>Financial Summary</h3>
+        </div>
+
+        <div class="summary-list" id="summaryList">
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- RECENT TRANSACTIONS -->
+    <section class="card transactions-card">
+
+      <div class="card-header">
+        <h3>Recent Transactions</h3>
+        <button class="small-btn">View All</button>
+      </div>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Donor</th>
+              <th>Project</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="transactionTableBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="adminreport.js"></script>
+</body>
+</html>
+
+
