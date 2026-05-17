@@ -1,310 +1,981 @@
-/**
- * @class AdminDashboard
- * @description لوحة تحكم الأدمن لسيستم "جسر الخير"
- * الكود مبني بالكامل بأسلوب الـ OOP ومربوط بالـ LocalStorage الحقيقي للسيستم (بدون أي بيانات فيك)
- */
 class AdminDashboard {
-    
-    // 1. المُنْشِئ: بيشتغل تلقائياً أول ما الصفحة تفتح ويجيب البيانات الحقيقية
+
     constructor() {
-        // ========== [ حارس البوابة - SECURITY CHECK ] ==========
-        // بنروح نشوف المتصفح مخزن إيه في الـ userRole
-        const currentRole = localStorage.getItem('userRole');
 
-        // لو الـ Role مش "System Admin"، يبقى الشخص ده متسلل أو يوزر عادي!
-        if (currentRole !== 'System Admin') {
-            alert("Access Denied! You are not authorized to view this page.");
-            window.location.href = "admin-login.html"; // طرده فوراً لصفحة لوجن الأدمن
-            return; // إيقاف تشغيل باقي الكود
+        this.checkAdminAccess();
+
+        this.projects =
+            JSON.parse(
+                localStorage.getItem("charityProjects")
+            ) || [];
+
+        this.cases =
+            JSON.parse(
+                localStorage.getItem("myCases")
+            ) || [];
+
+        this.users =
+            JSON.parse(
+                localStorage.getItem("allUsers")
+            ) || [];
+
+        this.history =
+            JSON.parse(
+                localStorage.getItem("history")
+            ) || [];
+
+        this.currentCaseIndex = null;
+
+        this.navItems =
+            document.querySelectorAll(".nav-item");
+
+        this.sections =
+            document.querySelectorAll(".section");
+
+        this.pageTitle =
+            document.getElementById("pageTitle");
+
+        this.currentDate =
+            document.getElementById("currentDate");
+
+        this.projectList =
+            document.getElementById("projectList");
+
+        this.projectsGrid =
+            document.getElementById("projectsGrid");
+
+        this.caseListOverview =
+            document.getElementById("caseListOverview");
+
+        this.casesBody =
+            document.getElementById("casesBody");
+
+        this.donorsBody =
+            document.getElementById("donorsBody");
+
+        this.transactionBody =
+            document.getElementById("transactionBody");
+
+        this.statDonations =
+            document.getElementById("stat-donations");
+
+        this.statProjects =
+            document.getElementById("stat-projects");
+
+        this.statCases =
+            document.getElementById("stat-cases");
+
+        this.statDonors =
+            document.getElementById("stat-donors");
+
+        this.createProjectModal =
+            document.getElementById("createProjectModal");
+
+        this.caseReviewModal =
+            document.getElementById("caseReviewModal");
+
+        this.caseReviewBody =
+            document.getElementById("caseReviewBody");
+
+        this.adminNameDisplay =
+            document.getElementById("adminNameDisplay");
+
+        this.adminRoleDisplay =
+            document.getElementById("adminRoleDisplay");
+
+        this.initialize();
+    }
+
+    initialize() {
+
+        this.loadAdminData();
+
+        this.showDate();
+
+        this.addNavigationEvents();
+
+        this.addLogoutEvent();
+
+        this.addProjectEvents();
+
+        this.addCaseEvents();
+
+        this.renderAll();
+    }
+
+    checkAdminAccess() {
+
+        const role =
+            localStorage.getItem("userRole");
+
+        if (role !== "System Admin") {
+
+            alert(
+                "Access denied"
+            );
+
+            window.location.href =
+                "adminlogin.html";
         }
-        // =======================================================
-
-        // لو عدا من الفحص، الكود الحقيقي يكمل عادي جداً:
-        this.cases = JSON.parse(localStorage.getItem('myCases')) || [];
-        this.history = JSON.parse(localStorage.getItem('history')) || [];
-        this.projects = JSON.parse(localStorage.getItem('charityProjects')) || [];
-        this.allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
-        
-        this.currentActiveIndex = null;
-        this.init();
-    } // القوس هنا بيقفل الـ constructor بس! مش الكلاس كله.
-    
-    // 2. دالة التشغيل الرئيسية (المايسترو بتاع الكلاس)
-    init() {
-        this.displayDate();           // عرض التاريخ فوق
-        this.setupNavigation();       // تشغيل زراير السايدبار والتنقل (SPA)
-        this.setupModals();           // تشغيل النوافذ المنبثقة (الـ Modals)
-        this.renderAll();             // رسم وعرض كل البيانات في الشاشات
     }
 
-    // دالة لعرض تاريخ اليوم في التوب بار فوق
-    displayDate() {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateEl = document.getElementById('currentDate');
-        if (dateEl) dateEl.innerText = new Date().toLocaleDateString('en-US', options);
+    loadAdminData() {
+
+        const email =
+            localStorage.getItem("userEmail");
+
+        const currentAdmin =
+            this.users.find(
+                (user) =>
+                    user.email === email
+            );
+
+        if (currentAdmin) {
+
+            this.adminNameDisplay.innerText =
+                currentAdmin.name;
+
+            this.adminRoleDisplay.innerText =
+                currentAdmin.role;
+        }
     }
 
-    // دالة بتحدث البيانات من الـ LocalStorage عشان تسمع أول ما تضغطي على أي زرار
+    showDate() {
+
+        const today =
+            new Date();
+
+        this.currentDate.innerText =
+            today.toLocaleDateString(
+                "en-US",
+                {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                }
+            );
+    }
+
+    addNavigationEvents() {
+
+        this.navItems.forEach((item) => {
+
+            item.addEventListener(
+                "click",
+                (e) => {
+
+                    e.preventDefault();
+
+                    const section =
+                        item.dataset.section;
+
+                    this.changeSection(
+                        section,
+                        item
+                    );
+                }
+            );
+        });
+    }
+
+    changeSection(
+        sectionName,
+        activeItem
+    ) {
+
+        this.sections.forEach((section) => {
+
+            section.classList.remove(
+                "active"
+            );
+        });
+
+        this.navItems.forEach((item) => {
+
+            item.classList.remove(
+                "active"
+            );
+        });
+
+        document.getElementById(
+            "section-" + sectionName
+        ).classList.add(
+            "active"
+        );
+
+        activeItem.classList.add(
+            "active"
+        );
+
+        this.pageTitle.innerText =
+            activeItem.innerText.trim();
+
+        this.refreshData();
+
+        this.renderAll();
+    }
+
     refreshData() {
-        this.cases = JSON.parse(localStorage.getItem('myCases')) || [];
-        this.history = JSON.parse(localStorage.getItem('history')) || [];
-        this.projects = JSON.parse(localStorage.getItem('charityProjects')) || [];
-        this.allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+        this.projects =
+            JSON.parse(
+                localStorage.getItem("charityProjects")
+            ) || [];
+
+        this.cases =
+            JSON.parse(
+                localStorage.getItem("myCases")
+            ) || [];
+
+        this.users =
+            JSON.parse(
+                localStorage.getItem("allUsers")
+            ) || [];
+
+        this.history =
+            JSON.parse(
+                localStorage.getItem("history")
+            ) || [];
     }
 
-    // 3. دالة التنقل الذكي بين الصفحات بدون ريفريش (Single Page Application)
-    setupNavigation() {
-        const navItems = document.querySelectorAll('.nav-item');
-        
-        navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault(); // منع الصفحة إنها تعمل ريفريش
-                
-                // شيل كلاس الـ active من كل الزراير وحطه على الزرار اللي اتضغط عليه بس
-                navItems.forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
+    addLogoutEvent() {
 
-                // إخفاء كل السكاشن وإظهار السكشن اللي واخد نفس الـ data-section بتاعة الزرار
-                const targetSection = item.getAttribute('data-section');
-                document.querySelectorAll('.main-content .section').forEach(sec => sec.classList.remove('active'));
-                
-                const sectionElement = document.getElementById(`section-${targetSection}`);
-                if (sectionElement) sectionElement.classList.add('active');
+        const logoutBtn =
+            document.getElementById(
+                "adminLogoutBtn"
+            );
 
-                // تحديث عنوان التوب بار باسم الصفحة الحالية
-                document.getElementById('pageTitle').innerText = item.innerText.trim();
+        logoutBtn.addEventListener(
+            "click",
+            () => {
 
-                // تحديث البيانات الحية وإعادة عرضها عشان لو الدونور عمل حاجة تسمع فوراً
-                this.refreshData();
-                this.renderAll();
-            });
-        });
+                localStorage.removeItem(
+                    "userRole"
+                );
 
-        // زرار تسجيل الخروج
-        document.getElementById('adminLogoutBtn')?.addEventListener('click', () => {
-            if (confirm("Are you sure you want to sign out?")) {
-                localStorage.removeItem('userRole');
-                window.location.href = "admin-login.html"; // يرجع لصفحة لوجن الإدمن المأمنة
+                localStorage.removeItem(
+                    "userEmail"
+                );
+
+                window.location.href =
+                    "adminlogin.html";
             }
-        });
+        );
     }
 
-    // 4. التحكم في فتح وقفل المودالز (الشبابيك المنبثقة)
-    setupModals() {
-        // فتح وقفل مودال إنشاء مشروع جديد
-        document.getElementById('openCreateProject')?.addEventListener('click', () => this.toggleModal('createProjectModal', true));
-        document.getElementById('closeCreateProject')?.addEventListener('click', () => this.toggleModal('createProjectModal', false));
-        
-        // لما الأدمن يضغط Create للمشروع الجديد
-        document.getElementById('createProjectForm')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleCreateProject();
-        });
+    addProjectEvents() {
 
-        // قفل مودال تعديل المشاريع ومراجعة الحالات
-        document.getElementById('closeEditProject')?.addEventListener('click', () => this.toggleModal('editProjectModal', false));
-        document.getElementById('closeCaseReview')?.addEventListener('click', () => this.toggleModal('caseReviewModal', false));
+        document.getElementById(
+            "openCreateProject"
+        ).addEventListener(
+            "click",
+            () => {
 
-        // أزرار قبول ورفض الحالات جوه المودال
-        document.getElementById('approveCase')?.addEventListener('click', () => this.changeCaseStatus('Approved'));
-        document.getElementById('rejectCase')?.addEventListener('click', () => this.changeCaseStatus('Rejected'));
+                this.createProjectModal
+                    .classList.add(
+                        "open"
+                    );
+            }
+        );
+
+        document.getElementById(
+            "closeCreateProject"
+        ).addEventListener(
+            "click",
+            () => {
+
+                this.createProjectModal
+                    .classList.remove(
+                        "open"
+                    );
+            }
+        );
+
+        document.getElementById(
+            "createProjectForm"
+        ).addEventListener(
+            "submit",
+            (e) => {
+
+                e.preventDefault();
+
+                this.createProject();
+            }
+        );
     }
 
-    toggleModal(modalId, show) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.style.display = show ? 'flex' : 'none';
+    createProject() {
+
+        const name =
+            document.getElementById(
+                "newProjectName"
+            ).value;
+
+        const category =
+            document.getElementById(
+                "newProjectCategory"
+            ).value;
+
+        const target =
+            Number(
+                document.getElementById(
+                    "newProjectTarget"
+                ).value
+            );
+
+        const newProject = {
+
+            id:
+                "PROJ-" +
+                Date.now(),
+
+            name:
+                name,
+
+            category:
+                category,
+
+            target:
+                target,
+
+            raised:
+                0,
+
+            status:
+                "Open"
+        };
+
+        this.projects.push(
+            newProject
+        );
+
+        localStorage.setItem(
+            "charityProjects",
+            JSON.stringify(
+                this.projects
+            )
+        );
+
+        document.getElementById(
+            "createProjectForm"
+        ).reset();
+
+        this.createProjectModal
+            .classList.remove(
+                "open"
+            );
+
+        this.renderAll();
     }
 
-    // 5. دالة تجميعية بتشغل كل دوال العرض (الرندر) مع بعض
+    addCaseEvents() {
+
+        document.getElementById(
+            "closeCaseReview"
+        ).addEventListener(
+            "click",
+            () => {
+
+                this.caseReviewModal
+                    .classList.remove(
+                        "open"
+                    );
+            }
+        );
+
+        document.getElementById(
+            "approveCase"
+        ).addEventListener(
+            "click",
+            () => {
+
+                this.updateCaseStatus(
+                    "Approved"
+                );
+            }
+        );
+
+        document.getElementById(
+            "rejectCase"
+        ).addEventListener(
+            "click",
+            () => {
+
+                this.updateCaseStatus(
+                    "Rejected"
+                );
+            }
+        );
+    }
+
+    updateStats() {
+
+        let totalMoney = 0;
+
+        this.history.forEach(
+            (transaction) => {
+
+                totalMoney +=
+                    Number(
+                        transaction.amount
+                    );
+            }
+        );
+
+        const donors =
+            this.users.filter(
+                (user) =>
+                    user.role === "Donor"
+            );
+
+        const pendingCases =
+            this.cases.filter(
+                (c) =>
+                    c.status ===
+                    "Pending"
+            );
+
+        this.statDonations.innerText =
+            totalMoney.toLocaleString();
+
+        this.statProjects.innerText =
+            this.projects.length;
+
+        this.statCases.innerText =
+            pendingCases.length;
+
+        this.statDonors.innerText =
+            donors.length;
+    }
+
+    renderOverviewProjects() {
+
+        this.projectList.innerHTML = "";
+
+        if (
+            this.projects.length === 0
+        ) {
+
+            this.projectList.innerHTML =
+                `
+                <p class="empty-text">
+                    No projects available
+                </p>
+                `;
+
+            return;
+        }
+
+        this.projects
+            .slice(0, 4)
+            .forEach((project) => {
+
+                const percent =
+                    project.target > 0
+                    ?
+                    Math.floor(
+                        (
+                            project.raised /
+                            project.target
+                        ) * 100
+                    )
+                    :
+                    0;
+
+                this.projectList.innerHTML +=
+                    `
+                    <div class="project-row">
+
+                        <div class="project-row-top">
+
+                            <strong>
+                                ${project.name}
+                            </strong>
+
+                            <span>
+                                ${percent}%
+                            </span>
+
+                        </div>
+
+                        <div class="progress-bar-bg">
+
+                            <div
+                            class="progress-bar-fill"
+                            style="
+                            width:${percent}%">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    `;
+            });
+    }
+
+    renderOverviewCases() {
+
+        this.caseListOverview.innerHTML =
+            "";
+
+        if (
+            this.cases.length === 0
+        ) {
+
+            this.caseListOverview.innerHTML =
+                `
+                <p class="empty-text">
+                    No cases submitted
+                </p>
+                `;
+
+            return;
+        }
+
+        this.cases
+            .slice(0, 4)
+            .forEach((c) => {
+
+                this.caseListOverview.innerHTML +=
+                    `
+                    <div class="case-item">
+
+                        <div class="case-avatar">
+                            👤
+                        </div>
+
+                        <div class="case-details">
+
+                            <div class="case-name">
+                                ${c.recipientName || "Recipient"}
+                            </div>
+
+                            <div class="case-desc">
+                                ${c.description || "No description"}
+                            </div>
+
+                        </div>
+
+                        <span class="status-badge ${c.status.toLowerCase()}">
+                            ${c.status}
+                        </span>
+
+                    </div>
+                    `;
+            });
+    }
+
+    renderTransactions() {
+
+        this.transactionBody.innerHTML =
+            "";
+
+        if (
+            this.history.length === 0
+        ) {
+
+            this.transactionBody.innerHTML =
+                `
+                <tr>
+
+                    <td colspan="7">
+                        No transactions yet
+                    </td>
+
+                </tr>
+                `;
+
+            return;
+        }
+
+        this.history
+            .slice()
+            .reverse()
+            .forEach((transaction) => {
+
+                this.transactionBody.innerHTML +=
+                    `
+                    <tr>
+
+                        <td>
+                            ${transaction.id || "TXN"}
+                        </td>
+
+                        <td>
+                            ${transaction.donor || "Unknown"}
+                        </td>
+
+                        <td>
+                            ${transaction.project || "General"}
+                        </td>
+
+                        <td>
+                            ${transaction.type || "Donation"}
+                        </td>
+
+                        <td>
+                            ${transaction.amount} EGP
+                        </td>
+
+                        <td>
+                            ${transaction.date || "Today"}
+                        </td>
+
+                        <td>
+
+                            <span class="status-badge approved">
+                                Completed
+                            </span>
+
+                        </td>
+
+                    </tr>
+                    `;
+            });
+    }
+
+    renderProjects() {
+
+        this.projectsGrid.innerHTML =
+            "";
+
+        if (
+            this.projects.length === 0
+        ) {
+
+            this.projectsGrid.innerHTML =
+                `
+                <p class="empty-text">
+                    No projects created
+                </p>
+                `;
+
+            return;
+        }
+
+        this.projects.forEach(
+            (project, index) => {
+
+                const percent =
+                    project.target > 0
+                    ?
+                    Math.floor(
+                        (
+                            project.raised /
+                            project.target
+                        ) * 100
+                    )
+                    :
+                    0;
+
+                this.projectsGrid.innerHTML +=
+                    `
+                    <div class="project-card">
+
+                        <div class="project-card-header">
+
+                            <div>
+
+                                <div class="project-card-name">
+                                    ${project.name}
+                                </div>
+
+                                <div class="project-card-cat">
+                                    ${project.category}
+                                </div>
+
+                            </div>
+
+                            <span class="status-badge open">
+                                ${project.status}
+                            </span>
+
+                        </div>
+
+                        <div class="project-card-amounts">
+
+                            <span>
+                                Raised:
+                                ${project.raised} EGP
+                            </span>
+
+                            <span>
+                                ${project.target} EGP
+                            </span>
+
+                        </div>
+
+                        <div class="progress-bar-bg">
+
+                            <div
+                            class="progress-bar-fill"
+                            style="
+                            width:${percent}%">
+                            </div>
+
+                        </div>
+
+                        <br>
+
+                        <button
+                        class="btn-primary"
+                        onclick="dashboard.deleteProject(${index})">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+                    `;
+            });
+    }
+
+    deleteProject(index) {
+
+        const confirmDelete =
+            confirm(
+                "Delete this project?"
+            );
+
+        if (!confirmDelete) {
+
+            return;
+        }
+
+        this.projects.splice(
+            index,
+            1
+        );
+
+        localStorage.setItem(
+            "charityProjects",
+            JSON.stringify(
+                this.projects
+            )
+        );
+
+        this.renderAll();
+    }
+
+    renderCases() {
+
+        this.casesBody.innerHTML =
+            "";
+
+        if (
+            this.cases.length === 0
+        ) {
+
+            this.casesBody.innerHTML =
+                `
+                <tr>
+
+                    <td colspan="6">
+                        No cases submitted
+                    </td>
+
+                </tr>
+                `;
+
+            return;
+        }
+
+        this.cases.forEach(
+            (c, index) => {
+
+                this.casesBody.innerHTML +=
+                    `
+                    <tr>
+
+                        <td>
+                            CASE-${index + 1}
+                        </td>
+
+                        <td>
+                            ${c.recipientName || "Recipient"}
+                        </td>
+
+                        <td>
+                            ${c.description || ""}
+                        </td>
+
+                        <td>
+                            ${c.dateSubmitted || "Today"}
+                        </td>
+
+                        <td>
+
+                            <span class="status-badge ${c.status.toLowerCase()}">
+                                ${c.status}
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                            class="btn-primary"
+                            onclick="dashboard.reviewCase(${index})">
+
+                                Review
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    `;
+            });
+    }
+
+    reviewCase(index) {
+
+        this.currentCaseIndex =
+            index;
+
+        const c =
+            this.cases[index];
+
+        this.caseReviewBody.innerHTML =
+            `
+            <h3>
+                ${c.recipientName}
+            </h3>
+
+            <br>
+
+            <p>
+                ${c.description}
+            </p>
+
+            <br>
+
+            <p>
+                Requested Amount:
+                ${c.amount || 0} EGP
+            </p>
+            `;
+
+        this.caseReviewModal
+            .classList.add(
+                "open"
+            );
+    }
+
+    updateCaseStatus(status) {
+
+        if (
+            this.currentCaseIndex === null
+        ) {
+
+            return;
+        }
+
+        this.cases[
+            this.currentCaseIndex
+        ].status = status;
+
+        localStorage.setItem(
+            "myCases",
+            JSON.stringify(
+                this.cases
+            )
+        );
+
+        this.caseReviewModal
+            .classList.remove(
+                "open"
+            );
+
+        this.renderAll();
+    }
+
+    renderDonors() {
+
+        this.donorsBody.innerHTML =
+            "";
+
+        const donors =
+            this.users.filter(
+                (user) =>
+                    user.role === "Donor"
+            );
+
+        if (
+            donors.length === 0
+        ) {
+
+            this.donorsBody.innerHTML =
+                `
+                <tr>
+
+                    <td colspan="6">
+                        No donors found
+                    </td>
+
+                </tr>
+                `;
+
+            return;
+        }
+
+        donors.forEach(
+            (donor, index) => {
+
+                this.donorsBody.innerHTML +=
+                    `
+                    <tr>
+
+                        <td>
+                            DON-${index + 1}
+                        </td>
+
+                        <td>
+                            ${donor.name}
+                        </td>
+
+                        <td>
+                            ${donor.email}
+                        </td>
+
+                        <td>
+                            ${donor.walletBalance || 0} EGP
+                        </td>
+
+                        <td>
+                            ${donor.totalDonated || 0} EGP
+                        </td>
+
+                        <td>
+                            ${donor.joinedDate || "2026"}
+                        </td>
+
+                    </tr>
+                    `;
+            });
+    }
+
     renderAll() {
-        this.renderCardsData();
-        this.renderOverviewTables();
+
+        this.updateStats();
+
+        this.renderOverviewProjects();
+
+        this.renderOverviewCases();
+
+        this.renderTransactions();
+
         this.renderProjects();
+
         this.renderCases();
+
         this.renderDonors();
     }
+}
 
-    // حَسْاب الإحصائيات في الصفحة الرئيسية (الكروت الأربعة الكبار)
-    renderCardsData() {
-        const donorUsers = this.allUsers.filter(u => u.role === 'donor' || u.role === 'Donor');
-        const totalMoney = this.history.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-        const pendingCasesCount = this.cases.filter(c => c.status === 'Pending' || c.status === 'pending').length;
-
-        document.getElementById('stat-donations').innerText = totalMoney.toLocaleString();
-        document.getElementById('stat-projects').innerText = this.projects.length;
-        document.getElementById('stat-cases').innerText = pendingCasesCount;
-        document.getElementById('stat-donors').innerText = donorUsers.length;
-    }
-
-    // عرض القوائم المصغرة والجدول المالي في الشاشة الرئيسية (Overview)
-    renderOverviewTables() {
-        const projectList = document.getElementById('projectList');
-        if (projectList) {
-            if (this.projects.length === 0) {
-                projectList.innerHTML = `<p style="color:var(--gray); font-size:14px;">No active projects created yet.</p>`;
-            } else {
-                projectList.innerHTML = this.projects.slice(0, 3).map(p => {
-                    const pct = p.target > 0 ? Math.min(((p.raised / p.target) * 100), 100).toFixed(0) : 0;
-                    return `
-                        <div style="margin-bottom: 12px;">
-                            <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px;">
-                                <span>${p.name}</span><strong>${pct}%</strong>
-                            </div>
-                            <div style="background:#e2e8f0; height:8px; border-radius:4px; overflow:hidden;">
-                                <div style="background:var(--primary); width:${pct}%; height:100%;"></div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        const txnBody = document.getElementById('transactionBody');
-        if (txnBody) {
-            if (this.history.length === 0) {
-                txnBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--gray);">No donations recorded yet.</td></tr>`;
-            } else {
-                txnBody.innerHTML = [...this.history].reverse().slice(0, 5).map(t => `
-                    <tr>
-                        <td>#TXN-${t.id || Math.floor(1000 + Math.random() * 9000)}</td>
-                        <td>${t.donor || 'Anonymous'}</td>
-                        <td>${t.project || 'General Donation'}</td>
-                        <td>${t.type || 'Money'}</td>
-                        <td style="font-weight:600; color:var(--primary);">${t.amount} EGP</td>
-                        <td>${t.date || 'Today'}</td>
-                        <td><span class="badge success">Completed</span></td>
-                    </tr>
-                `).join('');
-            }
-        }
-    }
-
-    // عرض وإدارة المشاريع (Charity Projects)
-    renderProjects() {
-        const grid = document.getElementById('projectsGrid');
-        if (!grid) return;
-
-        if (this.projects.length === 0) {
-            grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--gray);">No projects available. Click "+ Create New Project" to add one.</p>`;
-            return;
-        }
-
-        grid.innerHTML = this.projects.map((p, index) => {
-            const pct = p.target > 0 ? Math.min(((p.raised / p.target) * 100), 100).toFixed(0) : 0;
-            return `
-                <div class="card project-card">
-                    <h3>${p.name}</h3>
-                    <span style="font-size:12px; background:#edf2f7; padding:2px 8px; border-radius:10px; color:var(--gray);">${p.category}</span>
-                    <div style="margin: 15px 0;">
-                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px;">
-                            <span>Raised: <b>${p.raised || 0} EGP</b></span>
-                            <span>Target: ${p.target} EGP</span>
-                        </div>
-                        <div style="background:#e2e8f0; height:6px; border-radius:3px; overflow:hidden;">
-                            <div style="background:var(--secondary); width:${pct}%; height:100%;"></div>
-                        </div>
-                    </div>
-                    <button class="btn-primary" style="font-size:12px; padding:6px 12px; background:var(--gray);" onclick="window.dashboard.openEditProjectModal(${index})">⚙️ Configure</button>
-                </div>
-            `;
-        }).join('');
-    }
-
-    // إضافة مشروع جديد من الأدمن وحفظه في الـ LocalStorage بجد
-    handleCreateProject() {
-        const name = document.getElementById('newProjectName').value;
-        const category = document.getElementById('newProjectCategory').value;
-        const target = Number(document.getElementById('newProjectTarget').value);
-
-        this.projects.push({ name, category, target, raised: 0 });
-        localStorage.setItem('charityProjects', JSON.stringify(this.projects));
-        
-        this.toggleModal('createProjectModal', false); 
-        document.getElementById('createProjectForm').reset(); 
-        this.renderAll(); 
-    }
-
-    openEditProjectModal(index) {
-        this.currentActiveIndex = index;
-        const p = this.projects[index];
-        document.getElementById('editProjectName').value = p.name;
-        document.getElementById('editProjectCategory').value = p.category;
-        document.getElementById('editProjectTarget').value = p.target;
-        this.toggleModal('editProjectModal', true);
-    }
-
-    // عرض جدول الحالات اللي رفعها المستفيد (من شاشة الـ Recipient)
-    renderCases() {
-        const tbody = document.getElementById('casesBody');
-        if (!tbody) return;
-
-        if (this.cases.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--gray);">No beneficiary cases submitted yet.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = this.cases.map((c, index) => `
-            <tr>
-                <td>#CASE-${100 + index}</td>
-                <td style="font-weight:600;">${c.recipientName || c.name || 'Beneficiary'}</td>
-                <td>${c.description || 'No description.'}</td>
-                <td>${c.dateSubmitted || 'Recent'}</td>
-                <td><span class="status-dot ${c.status ? c.status.toLowerCase() : 'pending'}"></span> ${c.status || 'Pending'}</td>
-                <td>
-                    <button class="btn-primary" style="padding:4px 8px; font-size:12px;" onclick="window.dashboard.openReviewCaseModal(${index})">Review Case</button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    openReviewCaseModal(index) {
-        this.currentActiveIndex = index;
-        const c = this.cases[index];
-        document.getElementById('caseReviewBody').innerHTML = `
-            <p><b>Applicant Name:</b> ${c.recipientName || c.name || 'Beneficiary'}</p>
-            <p style="margin: 8px 0;"><b>Case Description:</b> ${c.description || 'N/A'}</p>
-            <p><b>Requested Target:</b> ${c.amount || c.target || 0} EGP</p>
-            <p style="margin-top:8px;"><b>Current Status:</b> <span style="font-weight:bold; color:var(--primary);">${c.status || 'Pending'}</span></p>
-        `;
-        this.toggleModal('caseReviewModal', true);
-    }
-
-    // قبول أو رفض الحالة وتحديث الـ LocalStorage فوراً عشان يسمع في شاشة المستفيد
-    changeCaseStatus(newStatus) {
-        if (this.currentActiveIndex !== null) {
-            this.cases[this.currentActiveIndex].status = newStatus;
-            localStorage.setItem('myCases', JSON.stringify(this.cases));
-            this.toggleModal('caseReviewModal', false); 
-            this.renderAll(); 
-        }
-    }
-
-    // عرض جدول المتبرعين الفعليين المسجلين في السيستم (من شاشة الـ Register)
-    renderDonors() {
-        const tbody = document.getElementById('donorsBody');
-        if (!tbody) return;
-
-        const donorUsers = this.allUsers.filter(u => u.role === 'donor' || u.role === 'Donor');
-
-        if (donorUsers.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--gray);">No donors registered in the system yet.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = donorUsers.map((d, index) => `
-            <tr>
-                <td>#DONOR-${500 + index}</td>
-                <td style="font-weight:600;">${d.name || 'Donor User'}</td>
-                <td>${d.email}</td>
-                <td>${d.walletBalance || 0} EGP</td>
-                <td style="color:var(--primary); font-weight:600;">${d.totalDonated || 0} EGP</td>
-                <td>${d.joinedDate || '2026-05-17'}</td>
-            </tr>
-        `).join('');
-    }
-} // القوس ده هنا هو اللي بيقفل كلاس الـ AdminDashboard بالكامل في آخر الملف!
-
-// تشغيل الكلاس وحفظ الأوبجكت في الـ window
 window.onload = () => {
-    window.dashboard = new AdminDashboard();
+
+    window.dashboard =
+        new AdminDashboard();
 };

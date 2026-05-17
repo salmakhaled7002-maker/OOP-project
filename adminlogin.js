@@ -1,134 +1,350 @@
-/**
- * @class AdminAuth
- * @description كلاس الـ OOP المسؤول عن التحقق وتأمين حساب الأدمن
- * يحتوي على ميزة الـ Data Seeding (حقن حساب الأدمن الأول تلقائياً في السيستم)
- */
+/* =========================================================
+   JASR EL KHEIR - ADMIN LOGIN SYSTEM
+   FULL WORKING VERSION
+========================================================= */
+
 class AdminAuth {
+
     constructor() {
-        // البيانات الافتراضية للأدمن الأول (Pre-configured Admin)
-        this.defaultAdminEmail = "admin@jasralkhayr.org";
-        this.defaultAdminPassword = "admin123";
 
-        // إعدادات نظام الأمان (Security Lockout Counter) ضد التخمين
-        this.loginAttempts = 0;
-        this.maxAttempts = 3;
-        this.isLocked = false;
+        this.maxAttempts = 5;
 
-        // ربط عناصر الـ HTML بالـ JavaScript
-        this.form = document.getElementById('adminLoginForm');
-        this.emailInput = document.getElementById('adminEmail');
-        this.passwordInput = document.getElementById('adminPassword');
-        this.errorDiv = document.getElementById('errorMessage');
-        this.submitBtn = document.getElementById('submitBtn');
+        this.lockTime = 24 * 60 * 60 * 1000;
 
-        // تشغيل نظام التأسيس التلقائي ثم أحداث الاستماع
-        this.seedAdminAccount();
+        this.form =
+            document.getElementById("adminLoginForm");
+
+        this.emailInput =
+            document.getElementById("adminEmail");
+
+        this.passwordInput =
+            document.getElementById("adminPassword");
+
+        this.errorMessage =
+            document.getElementById("errorMessage");
+
+        this.submitBtn =
+            document.getElementById("submitBtn");
+
+        this.seedMainAdmin();
+
+        this.checkLockStatus();
+
         this.init();
     }
 
-    /**
-     * [Data Seeding]
-     * دالة التأسيس: وظيفتها التأكد من وجود الأدمن داخل مصفوفة المستخدمين الحقيقية بالسيستم
-     */
-    seedAdminAccount() {
-        // جلب مصفوفة كل المستخدمين المشتركة في السيستم (التي تستخدمها شاشات اللوجن العادية)
-        let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+    /* ===============================
+       CREATE DEFAULT ADMIN
+    =============================== */
 
-        // الفحص: هل الإيميل الخاص بالأدمن موجود مسبقاً في السيستم؟
-        const adminExists = allUsers.some(user => user.email === this.defaultAdminEmail);
+    seedMainAdmin() {
 
-        // لو الأدمن مش موجود (السيستم لسه متصفر وجديد تماماً)، يتم حقنه فوراً كأنه قادم من الـ Backend
-        if (!adminExists) {
-            const newAdmin = {
-                name: "System Admin",
-                email: this.defaultAdminEmail,
-                password: this.defaultAdminPassword, // في الباكيند الحقيقي يتم تشفيره (Hashed)
+        let allUsers =
+            JSON.parse(
+                localStorage.getItem("allUsers")
+            ) || [];
+
+        const hasAdmin =
+            allUsers.some(user =>
+                user.role === "System Admin"
+            );
+
+        if (!hasAdmin) {
+
+            allUsers.push({
+
+                id: Date.now(),
+
+                name: "Main Admin",
+
+                email: "admin@jasralkheir.org",
+
+                password: "Admin@2026",
+
                 role: "System Admin",
-                joinedDate: new Date().toISOString().split('T')[0]
-            };
 
-            allUsers.push(newAdmin);
-            // حفظ المصفوفة المحدثة لكي تسمع في السيستم بالكامل
-            localStorage.setItem('allUsers', JSON.stringify(allUsers));
-            console.log("Admin account seeded successfully into 'allUsers'.");
+                joinedDate:
+                    new Date().toLocaleDateString()
+
+            });
+
+            localStorage.setItem(
+                "allUsers",
+                JSON.stringify(allUsers)
+            );
         }
     }
 
-    // دالة تشغيل الأحداث والـ Listeners
+    /* ===============================
+       START SYSTEM
+    =============================== */
+
     init() {
-        this.form.addEventListener('submit', (e) => {
-            e.preventDefault(); // منع الفورم من عمل Refresh للصفحة
-            this.handleLogin();
-        });
+
+        if (!this.form) return;
+
+        this.form.addEventListener(
+            "submit",
+            (e) => {
+
+                e.preventDefault();
+
+                this.handleLogin();
+            }
+        );
     }
 
-    // دالة فحص ومعالجة الدخول
+    /* ===============================
+       CHECK IF LOCKED
+    =============================== */
+
+    checkLockStatus() {
+
+        const lockUntil =
+            localStorage.getItem(
+                "adminLockUntil"
+            );
+
+        if (!lockUntil) return;
+
+        const currentTime =
+            new Date().getTime();
+
+        if (currentTime < Number(lockUntil)) {
+
+            this.lockSystem(
+                Number(lockUntil)
+            );
+
+        } else {
+
+            localStorage.removeItem(
+                "adminAttempts"
+            );
+
+            localStorage.removeItem(
+                "adminLockUntil"
+            );
+        }
+    }
+
+    /* ===============================
+       LOGIN PROCESS
+    =============================== */
+
     handleLogin() {
-        if (this.isLocked) return;
 
-        const email = this.emailInput.value.trim();
-        const password = this.passwordInput.value;
+        const email =
+            this.emailInput.value.trim();
 
-        // جلب المستخدمين للتحقق من الحساب الحالي
-        let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
-        
-        // البحث عن يوزر يطابق الإيميل والباسورد ويكون الـ Role بتاعه أدمن
-        const foundAdmin = allUsers.find(user => 
-            user.email === email && 
-            user.password === password && 
-            user.role === "System Admin"
-        );
+        const password =
+            this.passwordInput.value.trim();
+
+        const allUsers =
+            JSON.parse(
+                localStorage.getItem("allUsers")
+            ) || [];
+
+        let attempts =
+            Number(
+                localStorage.getItem(
+                    "adminAttempts"
+                )
+            ) || 0;
+
+        const foundAdmin =
+            allUsers.find(user =>
+
+                user.email === email &&
+                user.password === password &&
+                user.role === "System Admin"
+            );
 
         if (foundAdmin) {
-            this.loginSuccess(foundAdmin.email, foundAdmin.role);
+
+            localStorage.removeItem(
+                "adminAttempts"
+            );
+
+            localStorage.removeItem(
+                "adminLockUntil"
+            );
+
+            this.loginSuccess(foundAdmin);
+
         } else {
-            this.loginFailed();
+
+            attempts++;
+
+            localStorage.setItem(
+                "adminAttempts",
+                attempts
+            );
+
+            const remaining =
+                this.maxAttempts - attempts;
+
+            if (attempts >= this.maxAttempts) {
+
+                const lockUntil =
+                    new Date().getTime() +
+                    this.lockTime;
+
+                localStorage.setItem(
+                    "adminLockUntil",
+                    lockUntil
+                );
+
+                this.lockSystem(lockUntil);
+
+            } else {
+
+                this.showError(
+                    `Wrong admin credentials. Remaining attempts: ${remaining}`
+                );
+            }
         }
     }
 
-    // الدالة التي تعمل في حالة نجاح الدخول
-    loginSuccess(email, role) {
-        this.errorDiv.style.display = "none";
-        
-        // تخزين الصلاحيات النشطة في الـ LocalStorage لتتحقق منها الداشبورد
-        localStorage.setItem('userRole', role);
-        localStorage.setItem('userEmail', email);
+    /* ===============================
+       LOCK SYSTEM
+    =============================== */
 
-        this.submitBtn.innerText = "✓ Success! Redirecting...";
-        this.submitBtn.style.background = "#2d6a4f";
+    lockSystem(lockUntil) {
 
-        // الانتقال لصفحة الداشبورد
+        this.emailInput.disabled = true;
+
+        this.passwordInput.disabled = true;
+
+        this.submitBtn.disabled = true;
+
+        const timer =
+            setInterval(() => {
+
+                const currentTime =
+                    new Date().getTime();
+
+                const remainingTime =
+                    lockUntil - currentTime;
+
+                if (remainingTime <= 0) {
+
+                    clearInterval(timer);
+
+                    localStorage.removeItem(
+                        "adminAttempts"
+                    );
+
+                    localStorage.removeItem(
+                        "adminLockUntil"
+                    );
+
+                    this.emailInput.disabled = false;
+
+                    this.passwordInput.disabled = false;
+
+                    this.submitBtn.disabled = false;
+
+                    this.submitBtn.innerText =
+                        "Login";
+
+                    this.hideError();
+
+                    return;
+                }
+
+                const hours =
+                    Math.floor(
+                        remainingTime /
+                        (1000 * 60 * 60)
+                    );
+
+                const minutes =
+                    Math.floor(
+                        (
+                            remainingTime %
+                            (1000 * 60 * 60)
+                        ) /
+                        (1000 * 60)
+                    );
+
+                const seconds =
+                    Math.floor(
+                        (
+                            remainingTime %
+                            (1000 * 60)
+                        ) / 1000
+                    );
+
+                this.submitBtn.innerText =
+                    `Locked ${hours}h ${minutes}m ${seconds}s`;
+
+                this.showError(
+                    "Too many failed attempts. Try again later."
+                );
+
+            }, 1000);
+    }
+
+    /* ===============================
+       SUCCESS LOGIN
+    =============================== */
+
+    loginSuccess(admin) {
+
+        localStorage.setItem(
+            "userRole",
+            admin.role
+        );
+
+        localStorage.setItem(
+            "userEmail",
+            admin.email
+        );
+
+        localStorage.setItem(
+            "loggedInAdmin",
+            JSON.stringify(admin)
+        );
+
+        this.hideError();
+
+        this.submitBtn.innerText =
+            "Success Login...";
+
         setTimeout(() => {
-            window.location.href = "admin.html"; 
+
+            window.location.href =
+                "admindashboard.html";
+
         }, 1000);
     }
 
-    // الدالة التي تعمل في حالة فشل الدخول
-    loginFailed() {
-        this.loginAttempts++;
-        
-        if (this.loginAttempts >= this.maxAttempts) {
-            this.isLocked = true;
-            this.emailInput.disabled = true;
-            this.passwordInput.disabled = true;
-            this.submitBtn.disabled = true;
-            this.submitBtn.style.background = "#95a5a6";
-            this.submitBtn.innerText = "❌ Portal Locked";
-            
-            this.showError("Security Alert: Too many failed attempts. Access blocked for safety.");
-        } else {
-            const remaining = this.maxAttempts - this.loginAttempts;
-            this.showError(`Invalid admin credentials. You have ${remaining} attempts remaining.`);
-        }
-    }
+    /* ===============================
+       ERROR UI
+    =============================== */
 
     showError(message) {
-        this.errorDiv.innerText = message;
-        this.errorDiv.style.display = "block";
+
+        this.errorMessage.style.display =
+            "block";
+
+        this.errorMessage.innerText =
+            message;
+    }
+
+    hideError() {
+
+        this.errorMessage.style.display =
+            "none";
     }
 }
 
-// تشغيل الـ Class بمجرد تحميل المتصفح
+/* =========================================================
+   START SYSTEM
+========================================================= */
+
 window.onload = () => {
+
     new AdminAuth();
 };
