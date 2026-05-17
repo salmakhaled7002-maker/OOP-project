@@ -1,40 +1,28 @@
 /**
  * @class AdminDashboard
  * @description لوحة تحكم الأدمن لسيستم "جسر الخير"
- * الكود مبني بالكامل بأسلوب الـ OOP ومربوط بالـ LocalStorage الحقيقي للسيستم (بدون أي بيانات فيك)
+ * الكود معدل بالكامل ليتخاطب مع الـ PHP Backend الموحد عن طريق الـ API (Fetch) بدلاً من الـ LocalStorage
  */
 class AdminDashboard {
     
-    // 1. المُنْشِئ: بيشتغل تلقائياً أول ما الصفحة تفتح ويجيب البيانات الحقيقية
+    // 1. المُنْشِئ: بيشتغل تلقائياً أول ما الصفحة تفتح ويجيب البيانات الحقيقية من السيرفر
     constructor() {
-        // ========== [ حارس البوابة - SECURITY CHECK ] ==========
-        // بنروح نشوف المتصفح مخزن إيه في الـ userRole
-        const currentRole = localStorage.getItem('userRole');
-
-        // لو الـ Role مش "System Admin"، يبقى الشخص ده متسلل أو يوزر عادي!
-        if (currentRole !== 'System Admin') {
-            alert("Access Denied! You are not authorized to view this page.");
-            window.location.href = "admin-login.html"; // طرده فوراً لصفحة لوجن الأدمن
-            return; // إيقاف تشغيل باقي الكود
-        }
-        // =======================================================
-
-        // لو عدا من الفحص، الكود الحقيقي يكمل عادي جداً:
-        this.cases = JSON.parse(localStorage.getItem('myCases')) || [];
-        this.history = JSON.parse(localStorage.getItem('history')) || [];
-        this.projects = JSON.parse(localStorage.getItem('charityProjects')) || [];
-        this.allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+        // مصفوفات تخزين البيانات مؤقتاً داخل الكائن لعرضها في الشاشات
+        this.cases = [];
+        this.history = [];
+        this.projects = [];
+        this.allUsers = [];
         
-        this.currentActiveIndex = null;
+        this.currentActiveIndex = null; // لمتابعة الـ ID الخاص بالحالة أو المشروع المفتوح في الـ Modal
         this.init();
-    } // القوس هنا بيقفل الـ constructor بس! مش الكلاس كله.
+    }
     
     // 2. دالة التشغيل الرئيسية (المايسترو بتاع الكلاس)
     init() {
         this.displayDate();           // عرض التاريخ فوق
         this.setupNavigation();       // تشغيل زراير السايدبار والتنقل (SPA)
         this.setupModals();           // تشغيل النوافذ المنبثقة (الـ Modals)
-        this.renderAll();             // رسم وعرض كل البيانات في الشاشات
+        this.fetchAllDataFromServer(); // جلب كل البيانات الحية من الـ Backend لأول مرة
     }
 
     // دالة لعرض تاريخ اليوم في التوب بار فوق
@@ -44,12 +32,43 @@ class AdminDashboard {
         if (dateEl) dateEl.innerText = new Date().toLocaleDateString('en-US', options);
     }
 
-    // دالة بتحدث البيانات من الـ LocalStorage عشان تسمع أول ما تضغطي على أي زرار
-    refreshData() {
-        this.cases = JSON.parse(localStorage.getItem('myCases')) || [];
-        this.history = JSON.parse(localStorage.getItem('history')) || [];
-        this.projects = JSON.parse(localStorage.getItem('charityProjects')) || [];
-        this.allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+    // دالة موحدة بتجيب كل البيانات الحية من الـ PHP Backend وترسم الشاشات
+    fetchAllDataFromServer() {
+        // بنعمل fetch لكل الأكروت والجداول بالتوازي من الـ API المدمج
+        Promise.all([
+            fetch('admin_api.php?action=get_stats').then(res => res.json()),
+            fetch('admin_api.php?action=get_projects').then(res => res.json()),
+            fetch('admin_api.php?action=get_cases').then(res => res.json()),
+            fetch('admin_api.php?action=get_donors').then(res => res.json()),
+            fetch('admin_api.php?action=get_transactions').then(res => res.json())
+        ])
+        .then(([statsRes, projectsRes, casesRes, donorsRes, txnsRes]) => {
+            // لو الـ API رجع نجاح (بمعنى إن اليوزر مأمن والـ Session تمام)، بنخزن البيانات في الأوبجكت
+            if (statsRes.success) {
+                // تخزين مباشر للبيانات القادمة من قاعدة البيانات
+                this.projects = projectsRes.data || [];
+                this.cases = casesRes.data || [];
+                this.allUsers = donorsRes.data || [];
+                this.history = txnsRes.data || [];
+
+                // تحديث كروت الأرقام بناءً على الـ Backend الموحد
+                document.getElementById('stat-donations').innerText = Number(statsRes.data.total_donations).toLocaleString();
+                document.getElementById('stat-projects').innerText = statsRes.data.active_projects;
+                document.getElementById('stat-cases').innerText = statsRes.data.pending_cases;
+                document.getElementById('stat-donors').innerText = statsRes.data.total_donors;
+
+                // تشغيل دوال الرسم (الرندر) فوراً بالبيانات الجديدة
+                this.renderAll();
+            } else {
+                // حارس البوابة: لو الـ Backend رفض الاستجابة وقال Unauthorized
+                alert(statsRes.message || "Access Denied! Redirecting to login...");
+                window.location.href = "adminlogin.php"; 
+            }
+        })
+        .catch(err => {
+            console.error("Error communicating with PHP Backend:", err);
+            alert("Failed to load dashboard data from server.");
+        });
     }
 
     // 3. دالة التنقل الذكي بين الصفحات بدون ريفريش (Single Page Application)
@@ -74,17 +93,15 @@ class AdminDashboard {
                 // تحديث عنوان التوب بار باسم الصفحة الحالية
                 document.getElementById('pageTitle').innerText = item.innerText.trim();
 
-                // تحديث البيانات الحية وإعادة عرضها عشان لو الدونور عمل حاجة تسمع فوراً
-                this.refreshData();
-                this.renderAll();
+                // سحب البيانات حية من الـ API عند الانتقال بين الصفحات عشان لو حصل تبرع جديد يسمع فوراً
+                this.fetchAllDataFromServer();
             });
         });
 
-        // زرار تسجيل الخروج
+        // زرار تسجيل الخروج المربوط بالـ Backend المأمن
         document.getElementById('adminLogoutBtn')?.addEventListener('click', () => {
             if (confirm("Are you sure you want to sign out?")) {
-                localStorage.removeItem('userRole');
-                window.location.href = "admin-login.html"; // يرجع لصفحة لوجن الإدمن المأمنة
+                window.location.href = "logout.php"; // التوجيه لملف غلق الجلسة الموحد
             }
         });
     }
@@ -101,8 +118,7 @@ class AdminDashboard {
             this.handleCreateProject();
         });
 
-        // قفل مودال تعديل المشاريع ومراجعة الحالات
-        document.getElementById('closeEditProject')?.addEventListener('click', () => this.toggleModal('editProjectModal', false));
+        // قفل مودال مراجعة الحالات (إغلاق فقط)
         document.getElementById('closeCaseReview')?.addEventListener('click', () => this.toggleModal('caseReviewModal', false));
 
         // أزرار قبول ورفض الحالات جوه المودال
@@ -117,23 +133,10 @@ class AdminDashboard {
 
     // 5. دالة تجميعية بتشغل كل دوال العرض (الرندر) مع بعض
     renderAll() {
-        this.renderCardsData();
         this.renderOverviewTables();
         this.renderProjects();
         this.renderCases();
         this.renderDonors();
-    }
-
-    // حَسْاب الإحصائيات في الصفحة الرئيسية (الكروت الأربعة الكبار)
-    renderCardsData() {
-        const donorUsers = this.allUsers.filter(u => u.role === 'donor' || u.role === 'Donor');
-        const totalMoney = this.history.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-        const pendingCasesCount = this.cases.filter(c => c.status === 'Pending' || c.status === 'pending').length;
-
-        document.getElementById('stat-donations').innerText = totalMoney.toLocaleString();
-        document.getElementById('stat-projects').innerText = this.projects.length;
-        document.getElementById('stat-cases').innerText = pendingCasesCount;
-        document.getElementById('stat-donors').innerText = donorUsers.length;
     }
 
     // عرض القوائم المصغرة والجدول المالي في الشاشة الرئيسية (Overview)
@@ -144,7 +147,7 @@ class AdminDashboard {
                 projectList.innerHTML = `<p style="color:var(--gray); font-size:14px;">No active projects created yet.</p>`;
             } else {
                 projectList.innerHTML = this.projects.slice(0, 3).map(p => {
-                    const pct = p.target > 0 ? Math.min(((p.raised / p.target) * 100), 100).toFixed(0) : 0;
+                    const pct = p.target_amount > 0 ? Math.min(((p.raised_amount / p.target_amount) * 100), 100).toFixed(0) : 0;
                     return `
                         <div style="margin-bottom: 12px;">
                             <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px;">
@@ -159,19 +162,35 @@ class AdminDashboard {
             }
         }
 
+        // كارت عرض الحالات العاجلة بالـ Overview (عرض الحالات المعلقة فقط)
+        const caseListOverview = document.getElementById('caseListOverview');
+        if (caseListOverview) {
+            const pendingCases = this.cases.filter(c => c.status === 'Pending').slice(0, 2);
+            if (pendingCases.length === 0) {
+                caseListOverview.innerHTML = `<p style="color:var(--gray); font-size:14px;">No urgent pending cases.</p>`;
+            } else {
+                caseListOverview.innerHTML = pendingCases.map(c => `
+                    <div style="border-bottom:1px solid #edf2f7; padding:8px 0;">
+                        <h4 style="margin:0 0 4px 0;">${c.recipient_name}</h4>
+                        <p style="margin:0; font-size:13px; color:var(--gray);">Requested: ${Number(c.target_amount).toLocaleString()} EGP</p>
+                    </div>
+                `).join('');
+            }
+        }
+
         const txnBody = document.getElementById('transactionBody');
         if (txnBody) {
             if (this.history.length === 0) {
                 txnBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--gray);">No donations recorded yet.</td></tr>`;
             } else {
-                txnBody.innerHTML = [...this.history].reverse().slice(0, 5).map(t => `
+                txnBody.innerHTML = this.history.map(t => `
                     <tr>
-                        <td>#TXN-${t.id || Math.floor(1000 + Math.random() * 9000)}</td>
-                        <td>${t.donor || 'Anonymous'}</td>
-                        <td>${t.project || 'General Donation'}</td>
-                        <td>${t.type || 'Money'}</td>
-                        <td style="font-weight:600; color:var(--primary);">${t.amount} EGP</td>
-                        <td>${t.date || 'Today'}</td>
+                        <td>#TXN-${t.id}</td>
+                        <td>${t.donor_name}</td>
+                        <td>${t.project_name}</td>
+                        <td>Donation</td>
+                        <td style="font-weight:600; color:var(--primary);">${Number(t.amount).toLocaleString()} EGP</td>
+                        <td>${t.date_recorded.split(' ')[0]}</td>
                         <td><span class="badge success">Completed</span></td>
                     </tr>
                 `).join('');
@@ -189,51 +208,53 @@ class AdminDashboard {
             return;
         }
 
-        grid.innerHTML = this.projects.map((p, index) => {
-            const pct = p.target > 0 ? Math.min(((p.raised / p.target) * 100), 100).toFixed(0) : 0;
+        grid.innerHTML = this.projects.map((p) => {
+            const pct = p.target_amount > 0 ? Math.min(((p.raised_amount / p.target_amount) * 100), 100).toFixed(0) : 0;
             return `
                 <div class="card project-card">
                     <h3>${p.name}</h3>
                     <span style="font-size:12px; background:#edf2f7; padding:2px 8px; border-radius:10px; color:var(--gray);">${p.category}</span>
                     <div style="margin: 15px 0;">
                         <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px;">
-                            <span>Raised: <b>${p.raised || 0} EGP</b></span>
-                            <span>Target: ${p.target} EGP</span>
+                            <span>Raised: <b>${Number(p.raised_amount).toLocaleString()} EGP</b></span>
+                            <span>Target: ${Number(p.target_amount).toLocaleString()} EGP</span>
                         </div>
                         <div style="background:#e2e8f0; height:6px; border-radius:3px; overflow:hidden;">
                             <div style="background:var(--secondary); width:${pct}%; height:100%;"></div>
                         </div>
                     </div>
-                    <button class="btn-primary" style="font-size:12px; padding:6px 12px; background:var(--gray);" onclick="window.dashboard.openEditProjectModal(${index})">⚙️ Configure</button>
                 </div>
             `;
         }).join('');
     }
 
-    // إضافة مشروع جديد من الأدمن وحفظه في الـ LocalStorage بجد
+    // إرسال مشروع جديد للـ PHP Backend وحفظه في قاعدة البيانات الحقيقية
     handleCreateProject() {
-        const name = document.getElementById('newProjectName').value;
-        const category = document.getElementById('newProjectCategory').value;
-        const target = Number(document.getElementById('newProjectTarget').value);
+        const data = {
+            action: 'create_project',
+            name: document.getElementById('newProjectName').value,
+            category: document.getElementById('newProjectCategory').value,
+            target: document.getElementById('newProjectTarget').value
+        };
 
-        this.projects.push({ name, category, target, raised: 0 });
-        localStorage.setItem('charityProjects', JSON.stringify(this.projects));
-        
-        this.toggleModal('createProjectModal', false); 
-        document.getElementById('createProjectForm').reset(); 
-        this.renderAll(); 
+        fetch('admin_api.php', {
+            method: 'POST',
+            headers: { 'Content-Type: application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(res => {
+            alert(res.message);
+            if (res.success) {
+                this.toggleModal('createProjectModal', false); 
+                document.getElementById('createProjectForm').reset(); 
+                this.fetchAllDataFromServer(); // إعادة سحب البيانات لتحديث العدادات والسكاشن تلقائياً
+            }
+        })
+        .catch(err => console.error("Error creating project:", err));
     }
 
-    openEditProjectModal(index) {
-        this.currentActiveIndex = index;
-        const p = this.projects[index];
-        document.getElementById('editProjectName').value = p.name;
-        document.getElementById('editProjectCategory').value = p.category;
-        document.getElementById('editProjectTarget').value = p.target;
-        this.toggleModal('editProjectModal', true);
-    }
-
-    // عرض جدول الحالات اللي رفعها المستفيد (من شاشة الـ Recipient)
+    // عرض جدول الحالات الخيرية المرفوعة حياً من المستفيدين
     renderCases() {
         const tbody = document.getElementById('casesBody');
         if (!tbody) return;
@@ -243,68 +264,89 @@ class AdminDashboard {
             return;
         }
 
-        tbody.innerHTML = this.cases.map((c, index) => `
-            <tr>
-                <td>#CASE-${100 + index}</td>
-                <td style="font-weight:600;">${c.recipientName || c.name || 'Beneficiary'}</td>
-                <td>${c.description || 'No description.'}</td>
-                <td>${c.dateSubmitted || 'Recent'}</td>
-                <td><span class="status-dot ${c.status ? c.status.toLowerCase() : 'pending'}"></span> ${c.status || 'Pending'}</td>
-                <td>
-                    <button class="btn-primary" style="padding:4px 8px; font-size:12px;" onclick="window.dashboard.openReviewCaseModal(${index})">Review Case</button>
-                </td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = this.cases.map((c) => {
+            let actionButton = `<span style="color:var(--gray); font-size:12px;">Processed</span>`;
+            if (c.status === 'Pending') {
+                actionButton = `<button class="btn-primary" style="padding:4px 8px; font-size:12px;" onclick="window.dashboard.openReviewCaseModal(${c.id})">Review Case</button>`;
+            }
+
+            return `
+                <tr>
+                    <td>#CASE-${c.id}</td>
+                    <td style="font-weight:600;">${c.recipient_name}</td>
+                    <td>${c.description}</td>
+                    <td>${c.date_submitted.split(' ')[0]}</td>
+                    <td><span class="status-dot ${c.status.toLowerCase()}"></span> ${c.status}</td>
+                    <td>${actionButton}</td>
+                </tr>
+            `;
+        }).join('');
     }
 
-    openReviewCaseModal(index) {
-        this.currentActiveIndex = index;
-        const c = this.cases[index];
+    openReviewCaseModal(caseId) {
+        this.currentActiveIndex = caseId; // حفظ الـ ID الفعلي القادم من الـ Database للحالة المراد مراجعتها
+        const c = this.cases.find(item => item.id == caseId);
+        if (!c) return;
+
         document.getElementById('caseReviewBody').innerHTML = `
-            <p><b>Applicant Name:</b> ${c.recipientName || c.name || 'Beneficiary'}</p>
-            <p style="margin: 8px 0;"><b>Case Description:</b> ${c.description || 'N/A'}</p>
-            <p><b>Requested Target:</b> ${c.amount || c.target || 0} EGP</p>
-            <p style="margin-top:8px;"><b>Current Status:</b> <span style="font-weight:bold; color:var(--primary);">${c.status || 'Pending'}</span></p>
+            <p><b>Applicant Name:</b> ${c.recipient_name}</p>
+            <p style="margin: 8px 0;"><b>Case Description:</b> ${c.description}</p>
+            <p><b>Requested Target:</b> ${Number(c.target_amount).toLocaleString()} EGP</p>
+            <p style="margin-top:8px;"><b>Current Status:</b> <span style="font-weight:bold; color:var(--primary);">${c.status}</span></p>
         `;
         this.toggleModal('caseReviewModal', true);
     }
 
-    // قبول أو رفض الحالة وتحديث الـ LocalStorage فوراً عشان يسمع في شاشة المستفيد
+    // قبول أو رفض الحالة وإرسال التحديث للـ Database عبر الـ API
     changeCaseStatus(newStatus) {
         if (this.currentActiveIndex !== null) {
-            this.cases[this.currentActiveIndex].status = newStatus;
-            localStorage.setItem('myCases', JSON.stringify(this.cases));
-            this.toggleModal('caseReviewModal', false); 
-            this.renderAll(); 
+            const data = {
+                action: 'update_case',
+                case_id: this.currentActiveIndex,
+                status: newStatus
+            };
+
+            fetch('admin_api.php', {
+                method: 'POST',
+                headers: { 'Content-Type: application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
+                alert(res.message);
+                if (res.success) {
+                    this.toggleModal('caseReviewModal', false); 
+                    this.fetchAllDataFromServer(); // تحديث فوري للجداول والعدادات
+                }
+            })
+            .catch(err => console.error("Error updating case status:", err));
         }
     }
 
-    // عرض جدول المتبرعين الفعليين المسجلين في السيستم (من شاشة الـ Register)
+    // عرض جدول المتبرعين الفعليين القادم حياً من قاعدة البيانات
     renderDonors() {
         const tbody = document.getElementById('donorsBody');
         if (!tbody) return;
 
-        const donorUsers = this.allUsers.filter(u => u.role === 'donor' || u.role === 'Donor');
-
-        if (donorUsers.length === 0) {
+        if (this.allUsers.length === 0) {
             tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--gray);">No donors registered in the system yet.</td></tr>`;
             return;
         }
 
-        tbody.innerHTML = donorUsers.map((d, index) => `
+        tbody.innerHTML = this.allUsers.map((d) => `
             <tr>
-                <td>#DONOR-${500 + index}</td>
-                <td style="font-weight:600;">${d.name || 'Donor User'}</td>
+                <td>#DONOR-${d.id}</td>
+                <td style="font-weight:600;">${d.name}</td>
                 <td>${d.email}</td>
-                <td>${d.walletBalance || 0} EGP</td>
-                <td style="color:var(--primary); font-weight:600;">${d.totalDonated || 0} EGP</td>
-                <td>${d.joinedDate || '2026-05-17'}</td>
+                <td>${Number(d.wallet_balance).toLocaleString()} EGP</td>
+                <td style="color:var(--primary); font-weight:600;">${Number(d.total_donated).toLocaleString()} EGP</td>
+                <td>${d.joined_date.split(' ')[0]}</td>
             </tr>
         `).join('');
     }
-} // القوس ده هنا هو اللي بيقفل كلاس الـ AdminDashboard بالكامل في آخر الملف!
+}
 
-// تشغيل الكلاس وحفظ الأوبجكت في الـ window
+// تشغيل الكلاس عند تحميل النافذة وتخزينه في الـ Window لضمان عمل الـ onclick بالـ HTML
 window.onload = () => {
     window.dashboard = new AdminDashboard();
 };
