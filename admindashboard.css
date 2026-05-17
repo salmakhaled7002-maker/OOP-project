@@ -1,551 +1,425 @@
+/* ==========================================================================
+   1. إعدادات عامة ومتغيرات الألوان (Global Settings & CSS Variables)
+   ========================================================================== */
 :root {
-  --primary: #0b8f5a;
-  --secondary: #006b4f;
-  --light: #eef7f1;
-  --white: #ffffff;
-  --gray: #666;
-  --rose: #d9534f;
-  --border-color: #ccc;
+    /* درجات الأخضر الهادئ والمريح للعين */
+    --primary-green: #2d6a4f;       /* أخضر غامق ووقور للسايدبار والعناوين */
+    --medium-green: #40916c;        /* أخضر متوسط للأزرار والتقدم */
+    --light-green: #d8f3dc;         /* أخضر فاتح جداً للخلفيات الخفيفة والـ Badges */
+    --accent-green: #52b788;        /* أخضر حيوي للتلميحات النشطة */
+    
+    /* درجات الأبيض والرمادي للتوزيع المريح */
+    --bg-main: #f7f9f8;             /* خلفية الشاشة الأساسية (أبيض مائل للرمادي البارد) */
+    --bg-card: #ffffff;             /* الأبيض النقي للكروت والجداول */
+    --text-dark: #1b4332;           /* كحلي/أخضر داكن جداً للنصوص لجعلها مقروءة */
+    --text-muted: #6c757d;          /* رمادي للنصوص الثانوية */
+    --border-color: #e9ecef;        /* لون الفواصل والحدود */
+    
+    /* درجات حالات الطوارئ */
+    --danger-red: #e63946;          /* للرفض أو تسجيل الخروج */
+    --warning-yellow: #ffb703;      /* للحالات المعلقة */
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background: var(--light);
-  color: #333;
-  display: flex;
-  min-height: 100vh;
+    display: flex;
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* SIDEBAR STYLES */
+/* ==========================================================================
+   2. تنسيق السايدبار الثابت (Sidebar Styles)
+   ========================================================================== */
 .sidebar {
-  width: 260px;
-  background: var(--primary);
-  color: var(--white);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0; bottom: 0; left: 0;
-  z-index: 100;
-  padding: 30px 20px;
+    width: 260px;
+    background-color: var(--primary-green);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 16px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-brand {
-  padding-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 24px;
 }
 
-.brand-icon svg {
-  width: 36px;
-  height: 36px;
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.brand-ar {
-  font-weight: 700;
-  color: var(--white);
-  font-size: 16px;
+.brand-icon {
+    font-size: 24px;
 }
 
 .brand-en {
-  font-weight: 700;
-  color: var(--white);
-  font-size: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
 }
 
 .sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
 }
 
 .nav-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: rgba(255,255,255,0.6);
-  padding-left: 10px;
-  margin-top: 15px;
-  margin-bottom: 5px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--light-green);
+    opacity: 0.7;
+    margin-bottom: 4px;
+    padding-left: 8px;
 }
 
 .nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 15px;
-  color: var(--white);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 10px;
-  transition: background 0.3s ease, color 0.3s ease;
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
 }
 
-.nav-item svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  fill: none;
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding-left: 20px;
 }
 
-.nav-item:hover, .nav-item.active {
-  background: var(--white);
-  color: var(--primary);
+.nav-item.active {
+    background-color: var(--bg-card);
+    color: var(--primary-green);
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* تنسيق الفوتر المطور ليتسع لزر تسجيل الخروج */
 .sidebar-footer {
-  padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.footer-top-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.admin-avatar {
-  width: 36px;
-  height: 36px;
-  background: var(--white);
-  border-radius: 50%;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-.admin-info {
-  display: flex;
-  flex-direction: column;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
 }
 
 .admin-name {
-  font-size: 13px;
-  font-weight: 600;
+    font-weight: 600;
+    font-size: 15px;
 }
 
 .admin-role {
-  font-size: 11px;
-  color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    color: var(--light-green);
+    opacity: 0.8;
+    margin-bottom: 12px;
 }
 
-/* زر الـ Logout الجديد بألوان متناسقة ويتحول للأحمر عند التمرير */
 .logout-btn {
-  width: 100%;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--white);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-}
-
-.logout-btn svg {
-  width: 16px;
-  height: 16px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
 }
 
 .logout-btn:hover {
-  background: var(--white);
-  color: var(--rose);
+    background-color: var(--danger-red);
 }
 
-/* MAIN CONTENT STYLES */
+/* ==========================================================================
+   3. منطقة المحتوى والهيدر العلوي (Main Content & Topbar)
+   ========================================================================== */
 .main-content {
-  margin-left: 260px;
-  flex: 1;
-  padding: 40px;
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--white);
-  padding: 20px 30px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-  margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .page-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--secondary);
-}
-
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.notif-bell {
-  position: relative;
-  cursor: pointer;
-  color: var(--gray);
-  display: flex;
-  align-items: center;
-}
-
-.notif-bell svg {
-  width: 22px;
-  height: 22px;
-  stroke: currentColor;
-  fill: none;
-}
-
-.notif-dot {
-  position: absolute;
-  top: -2px; right: -2px;
-  width: 8px; height: 8px;
-  background: var(--rose);
-  border-radius: 50%;
+    font-size: 24px;
+    color: var(--primary-green);
+    font-weight: 700;
 }
 
 .date-display {
-  font-size: 14px;
-  color: var(--gray);
-  font-weight: 600;
+    font-size: 14px;
+    color: var(--text-muted);
 }
 
-/* SECTIONS GRID */
+/* التحكم في إخفاء وإظهار الصفحات */
 .section {
-  display: none;
+    display: none;
 }
 
 .section.active {
-  display: block;
+    display: block;
 }
 
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-/* CARDS & BOXES */
+/* ==========================================================================
+   4. كروت الإحصائيات والقوائم (Stats Cards & Grid Layouts)
+   ========================================================================== */
 .stats-grid {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
 }
 
 .stat-card {
-  flex: 1;
-  min-width: 220px;
-  background: var(--white);
-  padding: 25px;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--medium-green); /* خط أخضر أنيق أعلى الكارت */
 }
 
 .stat-label {
-  display: block;
-  font-size: 13px;
-  color: var(--gray);
-  margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
 }
 
-.stat-value {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--secondary);
-}
-
-.stat-currency {
-  font-size: 13px;
-  color: var(--gray);
+.stat-card p {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin-top: 8px;
 }
 
 .two-col {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
 }
 
 .card {
-  background: var(--white);
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    background-color: var(--bg-card);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
 }
 
-.card-header h3 {
-  font-size: 18px;
-  color: var(--secondary);
-  margin-bottom: 15px;
+.card h3 {
+    font-size: 16px;
+    color: var(--primary-green);
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--light-green);
+    padding-bottom: 8px;
 }
 
-.mt { margin-top: 24px; }
-
-/* TABLES STYLES */
+/* ==========================================================================
+   5. الجداول المنظمة (Data Tables)
+   ========================================================================== */
 .table-wrap {
-  overflow-x: auto;
-  margin-top: 15px;
+    overflow-x: auto;
 }
 
 .data-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  font-size: 13px;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
 }
 
 .data-table th {
-  padding: 12px 16px;
-  color: var(--gray);
-  font-weight: 600;
-  border-bottom: 2px solid var(--light);
-  background: #fafafa;
+    background-color: var(--light-green);
+    color: var(--primary-green);
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .data-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--light);
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
 }
 
-/* PROGRESS BARS */
-.project-row {
-  margin-bottom: 16px;
+.data-table tr:hover {
+    background-color: rgba(64, 145, 108, 0.03); /* تظليل أخضر خفيف جدا عند مرور الماوس */
 }
 
-.project-row-top {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  margin-bottom: 6px;
-}
-
-.progress-bar-bg {
-  height: 8px;
-  background: var(--light);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  width: 0;
-  background: var(--primary);
-  border-radius: 4px;
-  transition: width 0.6s ease;
-}
-
-.project-pct {
-  font-size: 11px;
-  color: var(--gray);
-  text-align: right;
-  margin-top: 2px;
-}
-
-/* PROJECTS GRID CARDS */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
-}
-
-.project-card {
-  background: var(--white);
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.project-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 15px;
-}
-
-.project-card-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--secondary);
-}
-
-.project-card-cat {
-  font-size: 12px;
-  color: var(--gray);
-}
-
-.project-card-amounts {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-/* CASE LIST OVERVIEW */
-.case-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--light);
-}
-
-.case-avatar {
-  width: 32px; height: 32px;
-  background: var(--light);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: var(--primary);
-}
-
-.case-details { flex: 1; }
-.case-name { font-size: 13px; font-weight: 600; }
-.case-desc { font-size: 11px; color: var(--gray); }
-
-/* STATUS BADGES */
-.status-badge {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.status-badge.open, .status-badge.pending { background: #fef3c7; color: #d97706; }
-.status-badge.closed, .status-badge.rejected { background: #ffeeef; color: var(--rose); }
-.status-badge.approved, .status-badge.completed { background: #dcfce7; color: var(--primary); }
-
-/* BUTTONS */
+/* ==========================================================================
+   6. الأزرار والـ Badges (Buttons & Badges)
+   ========================================================================== */
 .btn-primary {
-  padding: 12px 18px;
-  border: none;
-  border-radius: 10px;
-  background: var(--primary);
-  color: var(--white);
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease, transform 0.3s ease;
+    background-color: var(--medium-green);
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.3s;
 }
 
 .btn-primary:hover {
-  background: var(--secondary);
-  transform: translateY(-2px);
+    background-color: var(--primary-green);
 }
 
-.btn-sm {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
+.btn-close {
+    background: none;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
 }
 
-.full-width { width: 100%; margin-top: 15px; }
+.btn-approve {
+    background-color: var(--medium-green);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
-/* MODALS LAYOUT */
+.btn-reject {
+    background-color: var(--danger-red);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* استايل الحالات (Badges) داخل الجداول */
+.badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge.success {
+    background-color: var(--light-green);
+    color: var(--primary-green);
+}
+
+.badge.pending {
+    background-color: #fff3cd;
+    color: var(--warning-yellow);
+}
+
+/* شبكة عرض المشاريع */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.project-card {
+    border-top: 4px solid var(--accent-green) !important;
+}
+
+/* ==========================================================================
+   7. النوافذ المنبثقة (Modals)
+   ========================================================================== */
 .modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-overlay.open {
-  display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* شاشة سوداء شفافة خلف المودال */
+    display: none; /* مخفي افتراضياً والـ JS بيظهره flex */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .modal {
-  background: var(--white);
-  border-radius: 15px;
-  width: 100%;
-  max-width: 440px;
-  padding: 30px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: var(--bg-card);
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.3s ease-out;
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.modal-header h3 {
-  color: var(--secondary);
-}
-
-.modal-close {
-  background: none; border: none; font-size: 18px; cursor: pointer; color: var(--gray);
+.modal h3 {
+    color: var(--primary-green);
+    margin-bottom: 20px;
 }
 
 .modal-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .modal-form label {
-  font-size: 12px; font-weight: 600; color: var(--gray);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
 }
 
 .modal-form input, .modal-form select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  outline: none;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
 }
 
 .modal-form input:focus, .modal-form select:focus {
-  border-color: var(--primary);
+    border-color: var(--medium-green);
 }
 
 .modal-actions {
-  display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
 }
 
-@media(max-width:900px){
-  body { flex-direction: column; }
-  .sidebar { width: 100%; min-height: auto; position: relative; }
-  .main-content { margin-left: 0; padding: 25px; }
-  .topbar { padding: 15px 20px; }
+/* حركة انميشن أنيقة عند فتح المودال */
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

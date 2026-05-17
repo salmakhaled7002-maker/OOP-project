@@ -7,99 +7,74 @@
   <link rel="stylesheet" href="admindashboard.css" />
 </head>
 <body>
+
   <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="sidebar-brand">
-        <div class="brand-icon" style="font-size: 24px; background: rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
-  🌉
-</div>
-        <div class="brand-text">
-          <span class="brand-en">Jasr Al-Khayr</span>
-        </div>
-      </div>
-      <nav class="sidebar-nav">
-        <span class="nav-label">Main</span>
-        <a href="#" class="nav-item active" data-section="overview">
-          <svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Overview
-        </a>
-        <a href="#" class="nav-item" data-section="projects">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          Charity Projects
-        </a>
-        <a href="#" class="nav-item" data-section="cases">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-          Beneficiary Cases
-        </a>
-        <a href="#" class="nav-item" data-section="donors">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-          Donors
-        </a>
-      </nav>
+    
+    <div class="sidebar-brand">
+      <span class="brand-icon">🌉</span>
+      <span class="brand-en"> Jasr El Kheir</span>
     </div>
+    
+    <nav class="sidebar-nav">
+      <span class="nav-label">Main Menu</span>
+      
+      <a href="#" class="nav-item active" data-section="overview">📊 Overview</a>
+      <a href="#" class="nav-item" data-section="projects">📁 Charity Projects</a>
+      <a href="#" class="nav-item" data-section="cases">📑 Beneficiary Cases</a>
+      <a href="#" class="nav-item" data-section="donors">👥 Donors</a>
+    </nav>
 
     <div class="sidebar-footer">
-      <div class="footer-top-row">
-        <div class="admin-avatar">A</div>
-        <div class="admin-info">
-          <span class="admin-name">Admin User</span>
-          <span class="admin-role">System Admin</span>
-        </div>
+      <div class="admin-info">
+        <p class="admin-name" id="adminNameDisplay">Admin User</p>
+        <p class="admin-role" id="adminRoleDisplay">System Admin</p>
       </div>
-      <button class="logout-btn" id="adminLogoutBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-        Sign Out
-      </button>
+      <button class="logout-btn" id="adminLogoutBtn">🚪 Sign Out</button>
     </div>
+    
   </aside>
 
   <main class="main-content">
+    
     <header class="topbar">
-      <div class="topbar-left">
-        <div class="page-title" id="pageTitle">Overview</div>
-      </div>
-      <div class="topbar-right">
-        <div class="notif-bell" id="notifBell">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <span class="notif-dot"></span>
-        </div>
-        <div class="date-display" id="currentDate"></div>
-      </div>
+      <h1 class="page-title" id="pageTitle">Overview</h1>
+      <div class="date-display" id="currentDate"></div>
     </header>
 
     <section class="section active" id="section-overview">
+      
       <div class="stats-grid">
         <div class="stat-card">
           <span class="stat-label">Total Donations</span>
-          <span class="stat-value" id="stat-donations">0</span> <span class="stat-currency">EGP</span>
+          <p><span id="stat-donations">0</span> EGP</p>
         </div>
         <div class="stat-card">
           <span class="stat-label">Active Projects</span>
-          <span class="stat-value" id="stat-projects">0</span> <span class="stat-currency">programs</span>
+          <p><span id="stat-projects">0</span> programs</p>
         </div>
         <div class="stat-card">
           <span class="stat-label">Pending Cases</span>
-          <span class="stat-value" id="stat-cases">0</span> <span class="stat-currency">cases</span>
+          <p><span id="stat-cases">0</span> cases</p>
         </div>
         <div class="stat-card">
           <span class="stat-label">Total Donors</span>
-          <span class="stat-value" id="stat-donors">0</span> <span class="stat-currency">donors</span>
+          <p><span id="stat-donors">0</span> donors</p>
         </div>
       </div>
 
       <div class="two-col">
         <div class="card">
-          <div class="card-header"><h3>Project Funding Status</h3></div>
-          <div class="project-list" id="projectList"></div>
+          <h3>Project Funding Status</h3>
+          <div id="projectList"></div>
         </div>
         <div class="card">
-          <div class="card-header"><h3>Recent Beneficiary Cases</h3></div>
-          <div class="case-list" id="caseListOverview"></div>
+          <h3>Recent Beneficiary Cases</h3>
+          <div id="caseListOverview"></div>
         </div>
       </div>
 
-      <div class="card mt">
-        <div class="card-header"><h3>Recent Financial Log</h3></div>
+      <div class="card">
+        <h3>Recent Financial Log</h3>
         <div class="table-wrap">
           <table class="data-table">
             <thead>
@@ -117,18 +92,19 @@
           </table>
         </div>
       </div>
+      
     </section>
 
     <section class="section" id="section-projects">
       <div class="section-header">
-        <h2 style="color: var(--secondary);">Charity Projects</h2>
+        <h2>Charity Projects</h2>
         <button class="btn-primary" id="openCreateProject">+ Create New Project</button>
       </div>
       <div class="projects-grid" id="projectsGrid"></div>
     </section>
 
     <section class="section" id="section-cases">
-      <div class="section-header"><h2 style="color: var(--secondary);">Beneficiary Cases</h2></div>
+      <h2>Beneficiary Cases Management</h2>
       <div class="card">
         <div class="table-wrap">
           <table class="data-table">
@@ -149,7 +125,7 @@
     </section>
 
     <section class="section" id="section-donors">
-      <div class="section-header"><h2 style="color: var(--secondary);">Donor Management</h2></div>
+      <h2>Donor Management</h2>
       <div class="card">
         <div class="table-wrap">
           <table class="data-table">
@@ -168,17 +144,16 @@
         </div>
       </div>
     </section>
+    
   </main>
 
   <div class="modal-overlay" id="createProjectModal">
     <div class="modal">
-      <div class="modal-header">
-        <h3>Create New Project</h3>
-        <button class="modal-close" id="closeCreateProject">✕</button>
-      </div>
-      <form class="modal-form" id="createProjectForm">
+      <h3>Create New Project</h3>
+      <form id="createProjectForm">
         <label>Project Name</label>
         <input type="text" id="newProjectName" required />
+        
         <label>Project Category</label>
         <select id="newProjectCategory">
           <option>Orphan Sponsorship</option>
@@ -187,47 +162,24 @@
           <option>Medical Aid</option>
           <option>Education Support</option>
         </select>
+        
         <label>Funding Target (EGP)</label>
         <input type="number" id="newProjectTarget" min="100" required />
-        <button type="submit" class="btn-primary full-width">Create Project</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="editProjectModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Update Project Configurations</h3>
-        <button class="modal-close" id="closeEditProject">✕</button>
-      </div>
-      <form class="modal-form" id="editProjectForm">
-        <label>Project Name</label>
-        <input type="text" id="editProjectName" required />
-        <label>Project Category</label>
-        <select id="editProjectCategory">
-          <option>Orphan Sponsorship</option>
-          <option>Mosque Construction</option>
-          <option>Ramadan Feeding Program</option>
-          <option>Medical Aid</option>
-          <option>Education Support</option>
-        </select>
-        <label>Funding Target (EGP)</label>
-        <input type="number" id="editProjectTarget" min="100" required />
-        <button type="submit" class="btn-primary full-width" style="background: var(--secondary);">Save Changes</button>
+        
+        <button type="submit" class="btn-primary">Create Project</button>
+        <button type="button" class="btn-close" id="closeCreateProject">Cancel</button>
       </form>
     </div>
   </div>
 
   <div class="modal-overlay" id="caseReviewModal">
     <div class="modal">
-      <div class="modal-header">
-        <h3>Review Beneficiary Case</h3>
-        <button class="modal-close" id="closeCaseReview">✕</button>
-      </div>
-      <div class="modal-body" id="caseReviewBody" style="margin-bottom: 15px; color: var(--gray);"></div>
+      <h3>Review Beneficiary Case</h3>
+      <div id="caseReviewBody"></div>
       <div class="modal-actions">
-        <button class="btn-primary" id="approveCase" style="background: var(--primary);">✓ Approve</button>
-        <button class="btn-primary" id="rejectCase" style="background: var(--rose);">✕ Reject</button>
+        <button class="btn-approve" id="approveCase">✓ Approve</button>
+        <button class="btn-reject" id="rejectCase">✕ Reject</button>
+        <button type="button" class="btn-close" id="closeCaseReview">Close</button>
       </div>
     </div>
   </div>
